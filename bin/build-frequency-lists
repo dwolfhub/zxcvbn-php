@@ -1,0 +1,37 @@
+#!/usr/bin/env php
+<?php
+/**
+ * Generates frequency-lists.php from frequency info in data directory
+ */
+
+// array key and number of words to collect; null means include all
+$dictionaries = [
+    'us_tv_and_film' => 30000,
+    'english_wikipedia' => 30000,
+    'passwords' => 30000,
+    'surnames' => 10000,
+    'male_names' => null,
+    'female_names' => null,
+];
+
+$dataDir = __DIR__ . '/../data/';
+$outputFile = __DIR__ . '/../Matcher/DataProvider/FrequencyLists.php';
+
+
+foreach (glob($dataDir . '/*.txt') as $filePath) {
+    $fileInfo = pathinfo($filePath);
+    $fileName = $fileInfo['filename'];
+    $ext = $fileInfo['extension'];
+    if (!in_array($fileName, $dictionaries)) {
+        printf(
+            'Warning: %s appears in %s directory but not in dictionary settings. Excluding.' . PHP_EOL,
+            $fileName,
+            $dataDir
+        );
+    }
+
+    $tokenToRank = [];
+    $file = fopen($filePath, 'r');
+
+    // TODO
+}

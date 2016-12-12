@@ -2,7 +2,7 @@
 
 namespace ZxcvbnPhp\Test\Matchers;
 
-use ZxcvbnPhp\Matchers\DateMatch;
+use ZxcvbnPhp\Matcher\DateMatch;
 
 class DateTest extends \PHPUnit_Framework_TestCase
 {

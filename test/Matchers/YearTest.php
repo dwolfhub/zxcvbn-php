@@ -2,7 +2,7 @@
 
 namespace ZxcvbnPhp\Test\Matchers;
 
-use ZxcvbnPhp\Matchers\YearMatch;
+use ZxcvbnPhp\Matcher\YearMatch;
 
 class YearTest extends \PHPUnit_Framework_TestCase
 {

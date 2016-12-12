@@ -2,7 +2,7 @@
 
 namespace ZxcvbnPhp\Test\Matchers;
 
-use ZxcvbnPhp\Matchers\Bruteforce;
+use ZxcvbnPhp\Matcher\Bruteforce;
 
 class BruteforceTest extends \PHPUnit_Framework_TestCase
 {

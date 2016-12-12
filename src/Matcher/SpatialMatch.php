@@ -1,10 +1,10 @@
 <?php
 
-namespace ZxcvbnPhp\Matchers;
+namespace ZxcvbnPhp\Matcher;
 
 /**
  * Class SpatialMatch.
- * @package ZxcvbnPhp\Matchers
+ * @package ZxcvbnPhp\Matcher
  */
 class SpatialMatch extends Match
 {

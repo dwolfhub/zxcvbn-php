@@ -1,6 +1,6 @@
 <?php
 
-namespace ZxcvbnPhp\Matchers;
+namespace ZxcvbnPhp\Matcher;
 
 class RepeatMatch extends Match
 {

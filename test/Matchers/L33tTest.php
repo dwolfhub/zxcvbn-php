@@ -2,7 +2,7 @@
 
 namespace ZxcvbnPhp\Test\Matchers;
 
-use ZxcvbnPhp\Matchers\L33tMatch;
+use ZxcvbnPhp\Matcher\L33tMatch;
 
 class L33tTest extends \PHPUnit_Framework_TestCase
 {

@@ -2,7 +2,7 @@
 
 namespace ZxcvbnPhp;
 
-use ZxcvbnPhp\Matchers\Bruteforce;
+use ZxcvbnPhp\Matcher\Bruteforce;
 
 class Searcher
 {

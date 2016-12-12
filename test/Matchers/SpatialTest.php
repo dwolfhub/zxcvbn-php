@@ -2,7 +2,7 @@
 
 namespace ZxcvbnPhp\Test\Matchers;
 
-use ZxcvbnPhp\Matchers\SpatialMatch;
+use ZxcvbnPhp\Matcher\SpatialMatch;
 
 class SpatialTest extends \PHPUnit_Framework_TestCase
 {

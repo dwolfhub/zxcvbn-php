@@ -1,8 +1,8 @@
 <?php
 
-namespace ZxcvbnPhp\Test\Matchers;
+namespace ZxcvbnPhp\Test\Matcher;
 
-use ZxcvbnPhp\Matchers\DictionaryMatch;
+use ZxcvbnPhp\Matcher\DictionaryMatch;
 
 class DictionaryTest extends \PHPUnit_Framework_TestCase
 {

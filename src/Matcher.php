@@ -2,7 +2,7 @@
 
 namespace ZxcvbnPhp;
 
-use ZxcvbnPhp\Matchers\MatchInterface;
+use ZxcvbnPhp\Matcher\MatchInterface;
 
 class Matcher
 {
@@ -42,14 +42,14 @@ class Matcher
     {
         // @todo change to dynamic
         return array(
-            'ZxcvbnPhp\Matchers\DateMatch',
-            'ZxcvbnPhp\Matchers\DigitMatch',
-            'ZxcvbnPhp\Matchers\L33tMatch',
-            'ZxcvbnPhp\Matchers\RepeatMatch',
-            'ZxcvbnPhp\Matchers\SequenceMatch',
-            'ZxcvbnPhp\Matchers\SpatialMatch',
-            'ZxcvbnPhp\Matchers\YearMatch',
-            'ZxcvbnPhp\Matchers\DictionaryMatch',
+            'ZxcvbnPhp\Matcher\DateMatch',
+            'ZxcvbnPhp\Matcher\DigitMatch',
+            'ZxcvbnPhp\Matcher\L33tMatch',
+            'ZxcvbnPhp\Matcher\RepeatMatch',
+            'ZxcvbnPhp\Matcher\SequenceMatch',
+            'ZxcvbnPhp\Matcher\SpatialMatch',
+            'ZxcvbnPhp\Matcher\YearMatch',
+            'ZxcvbnPhp\Matcher\DictionaryMatch',
         );
     }
 }

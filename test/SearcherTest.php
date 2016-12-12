@@ -2,9 +2,9 @@
 
 namespace ZxcvbnPhp\Test;
 
-use ZxcvbnPhp\Matchers\RepeatMatch;
+use ZxcvbnPhp\Matcher\RepeatMatch;
 use ZxcvbnPhp\Searcher;
-use ZxcvbnPhp\Matchers\Repeat;
+use ZxcvbnPhp\Matcher\Repeat;
 
 class SearcherTest extends \PHPUnit_Framework_TestCase
 {
