@@ -48,7 +48,7 @@ foreach (glob($dataDir . '/*.txt') as $filePath) {
 
     $rank = 1;
     while (($line = fgets($file)) !== false) {
-        $token = explode(' ', $line)[0];
+        $token = trim(explode(' ', $line)[0]);
         $tokenToRank[$token] = $rank;
         $rank++;
     }
@@ -120,7 +120,9 @@ foreach ($filteredTokenAndRank as $name => $tokenRankPairs) {
     if ($cutoffLimit and count($tokenRankPairs) > $cutoffLimit) {
         $tokenRankPairs = array_slice($tokenRankPairs, 0, $cutoffLimit);
     }
-    $result[$name] = $tokenRankPairs;
+    $result[$name] = implode(',', array_map(function ($item) {
+        return $item[0];
+    }, $tokenRankPairs));
 }
 
 $freqLists = $result;
