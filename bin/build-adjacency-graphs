@@ -1,0 +1,78 @@
+#!/usr/bin/env php
+<?php
+
+$qwerty = "
+`~ 1! 2@ 3# 4$ 5% 6^ 7& 8* 9( 0) -_ =+
+    qQ wW eE rR tT yY uU iI oO pP [{ ]} |
+     aA sS dD fF gG hH jJ kK lL ;: '\"
+      zZ xX cC vV bB nN mM ,< .> /?
+";
+$dvorak = "
+`~ 1! 2@ 3# 4$ 5% 6^ 7& 8* 9( 0) [{ ]}
+    '\" ,< .> pP yY fF gG cC rR lL /? =+ |
+     aA oO eE uU iI dD hH tT nN sS -_
+      ;: qQ jJ kK xX bB mM wW vV zZ
+";
+$keypad = "
+  / * -
+7 8 9 +
+4 5 6
+1 2 3
+  0 .
+";
+$macKeypad = "
+  = / *
+7 8 9 -
+4 5 6 +
+1 2 3
+  0 .
+";
+
+function getSlantedAdjacentCoords($x, $y)
+{
+    return [[$x - 1, $y], [$x, $y - 1], [$x + 1, $y - 1], [$x + 1, $y], [$x, $y + 1], [$x - 1, $y + 1],];
+}
+
+function getAlignedAdjacentCoords($x, $y)
+{
+    return [
+        [$x - 1, $y],
+        [$x - 1, $y - 1],
+        [$x, $y - 1],
+        [$x + 1, $y - 1],
+        [$x + 1, $y],
+        [$x + 1, $y + 1],
+        [$x, $y + 1],
+        [$x - 1, $y + 1]
+    ];
+}
+
+function adjacencyFunc($x, $y, $slanted) {
+    if ($slanted) {
+        return getSlantedAdjacentCoords($x, $y);
+    } else {
+        return getAlignedAdjacentCoords($x, $y);
+    }
+}
+
+function buildGraph($layoutStr, $slanted)
+{
+    $positionTable = [];
+    $tokens = explode(' ', $layoutStr); // todo needs to be all white space?
+    $tokenSize = count($tokens[0]);
+    $xUnit = $tokenSize + 1;
+    foreach ($tokens as $token) {
+        assert(count(token) == $tokenSize, 'token len mismatch:\n ' . $layoutStr);
+    }
+
+    foreach (explode("\n", $layoutStr) as $y => $line) {
+        if ($slanted) {
+            $slant = $y - 1;
+        } else {
+            $slant = 0;
+        }
+        foreach (explode(' ', $line) as $token) { // todo needs to be all white space?
+            
+        }
+    }
+}
