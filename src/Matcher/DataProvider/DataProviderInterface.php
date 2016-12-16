@@ -4,5 +4,5 @@ namespace ZxcvbnPhp\Matcher\DataProvider;
 
 interface DataProviderInterface
 {
-    public function getData(); // returns array
+    public static function getData(); // returns array
 }

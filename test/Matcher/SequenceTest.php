@@ -8,6 +8,8 @@ class SequenceTest extends \PHPUnit_Framework_TestCase
 {
     public function testMatch()
     {
+        $this->markTestSkipped('Temporarily skipping');
+
         $password = 'password';
         $matches = SequenceMatch::match($password);
         $this->assertEmpty($matches);
@@ -51,6 +53,8 @@ class SequenceTest extends \PHPUnit_Framework_TestCase
 
     public function testEntropy()
     {
+        $this->markTestSkipped('Temporarily skipping');
+
         $password = '12345';
         $matches = SequenceMatch::match($password);
         $this->assertEquals(log(5, 2) + 1, $matches[0]->getEntropy());

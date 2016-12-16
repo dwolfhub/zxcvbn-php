@@ -137,9 +137,16 @@ fwrite(
  
 namespace ZxcvbnPhp\\Matcher\\DataProvider;
 
+/**
+ * Class FrequencyLists
+ * @package ZxcvbnPhp\Matcher\DataProvider
+ */
 class FrequencyLists implements DataProviderInterface
 {
-    public function getData() {
+    /**
+     * @return array
+     */
+    public static function getData() {
         return ' . var_export($freqLists, true) . ';    
     }
 }

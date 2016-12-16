@@ -19,6 +19,8 @@ class BruteforceTest extends \PHPUnit_Framework_TestCase
 
         $match = new Bruteforce('Ab', 0, 1, 'Ab');
         $this->assertSame(52, $match->getCardinality());
+
+        $this->markTestSkipped('Temporarily skipping');
     }
 
     public function testEntropy()
