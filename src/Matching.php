@@ -2,9 +2,9 @@
 
 namespace ZxcvbnPhp;
 
-use ZxcvbnPhp\Matcher\MatchInterface;
+use ZxcvbnPhp\Match\MatchInterface;
 
-class Matcher
+class Matching
 {
 
     /**

@@ -2,7 +2,7 @@
 
 namespace ZxcvbnPhp\Test\Matchers;
 
-use ZxcvbnPhp\Matcher\RepeatMatch;
+use ZxcvbnPhp\Match\RepeatMatch;
 
 class RepeatTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace ZxcvbnPhp\Matcher;
+namespace ZxcvbnPhp\Match;
 
-use ZxcvbnPhp\Matcher\DictionaryMatch;
+use ZxcvbnPhp\Match\DictionaryMatch;
 
 /**
  * Class L33tMatch extends DictionaryMatch to translate l33t into dictionary words for matching.
- * @package ZxcvbnPhp\Matcher
+ * @package ZxcvbnPhp\Match
  */
 class L33tMatch extends DictionaryMatch
 {

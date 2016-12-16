@@ -3,10 +3,10 @@
 namespace ZxcvbnPhp;
 
 /**
- * Class FeedbackProvider
+ * Class Feedback
  * @package ZxcvbnPhp
  */
-class FeedbackProvider
+class Feedback
 {
     /**
      * @var array
@@ -30,7 +30,7 @@ class FeedbackProvider
     protected $sequence;
 
     /**
-     * FeedbackProvider constructor.
+     * Feedback constructor.
      * @param $score
      * @param $sequence
      */

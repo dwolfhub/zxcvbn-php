@@ -1,6 +1,6 @@
 <?php
 
-namespace ZxcvbnPhp\Matcher;
+namespace ZxcvbnPhp\Match;
 
 class DictionaryMatch extends Match
 {

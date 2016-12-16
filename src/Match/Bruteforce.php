@@ -4,13 +4,13 @@
  *
  */
 
-namespace ZxcvbnPhp\Matcher;
+namespace ZxcvbnPhp\Match;
 
 /**
  * Class Bruteforce
- * @package ZxcvbnPhp\Matcher
+ * @package ZxcvbnPhp\Match
  *
- * Intentionally not named with Match suffix to prevent autoloading from Matcher.
+ * Intentionally not named with Match suffix to prevent autoloading from Match.
  */
 class Bruteforce extends Match
 {

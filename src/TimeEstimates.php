@@ -3,10 +3,10 @@
 namespace ZxcvbnPhp;
 
 /**
- * Class TimeEstimator
+ * Class TimeEstimates
  * @package ZxcvbnPhp
  */
-class TimeEstimator
+class TimeEstimates
 {
     /**
      * @var int
@@ -14,7 +14,7 @@ class TimeEstimator
     protected $guesses;
 
     /**
-     * TimeEstimator constructor.
+     * TimeEstimates constructor.
      * @param $guesses
      */
     public function __construct($guesses)

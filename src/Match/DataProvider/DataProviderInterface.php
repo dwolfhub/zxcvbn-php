@@ -1,6 +1,6 @@
 <?php
 
-namespace ZxcvbnPhp\Matcher\DataProvider;
+namespace ZxcvbnPhp\Match\DataProvider;
 
 interface DataProviderInterface
 {

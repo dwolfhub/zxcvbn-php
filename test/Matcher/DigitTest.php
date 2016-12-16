@@ -2,7 +2,7 @@
 
 namespace ZxcvbnPhp\Test\Matchers;
 
-use ZxcvbnPhp\Matcher\DigitMatch;
+use ZxcvbnPhp\Match\DigitMatch;
 
 class DigitTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,7 +1,7 @@
 <?php
 namespace ZxcvbnPhp\test\Matcher\DataProvider;
 
-use ZxcvbnPhp\Matcher\DataProvider\FrequencyLists;
+use ZxcvbnPhp\Match\DataProvider\FrequencyLists;
 
 class FrequencyListsTest extends \PHPUnit_Framework_TestCase
 {

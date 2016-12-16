@@ -2,7 +2,7 @@
 
 namespace ZxcvbnPhp\Test\Matchers;
 
-use ZxcvbnPhp\Matcher\SequenceMatch;
+use ZxcvbnPhp\Match\SequenceMatch;
 
 class SequenceTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,23 +1,14 @@
 language: php
 
 php:
+  - 7.1
   - 7.0
   - 5.6
   - 5.5
-  - 5.4
-  - 5.3
   - hhvm
 
-matrix:
-    fast_finish: true
-    allow_failures:
-        - php: 5.5
-        - php: 5.4
-        - php: 5.3
-        - php: hhvm
-
 before_script:
-  - composer update --prefer-dist
+  - composer install -ovn
 
 after_script:
   - php vendor/bin/coveralls -v
