@@ -102,16 +102,16 @@ function buildGraph($layoutStr, $slanted)
     foreach ($positionTable as $position => $chars) {
         $xyCoords = explode('|', $position);
         assert(count($xyCoords) == 2, 'xyCoords is an incorrect length');
-        $x = $xyCoords[0];
-        $y = $xyCoords[1];
+        $x = (int)$xyCoords[0];
+        $y = (int)$xyCoords[1];
 
         foreach (str_split($chars) as $char) {
-            $adjacencyGraph[$char] = [];
+            $adjacencyGraph[(string)$char] = [];
             foreach (adjacencyFunc($x, $y, $slanted) as $coord) {
                 $hash = implode('|', $coord);
                 array_push(
                     $adjacencyGraph[$char],
-                    isset($positionTable[$hash]) ? $positionTable[$hash] : null
+                    !empty($positionTable[$hash]) ? $positionTable[$hash] : null
                 );
             }
         }
