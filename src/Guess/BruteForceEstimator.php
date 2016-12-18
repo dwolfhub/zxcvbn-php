@@ -1,0 +1,35 @@
+<?php
+namespace ZxcvbnPhp\Guess;
+
+use ZxcvbnPhp\Scoring;
+
+/**
+ * Class BruteForceEstimator
+ * @package ZxcvbnPhp\Guess
+ */
+class BruteForceEstimator extends AbstractEstimator
+{
+    /**
+     * @var int
+     */
+    const BRUTEFORCE_CARDINALITY = 10;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function estimate()
+    {
+        $tokenLen = strlen($this->match['token']);
+        $guesses = self::BRUTEFORCE_CARDINALITY ** $tokenLen;
+        // small detail: make bruteforce matches at minimum one guess bigger than
+        // smallest allowed submatch guesses, such that non-bruteforce submatches
+        // over the same [i..j] take precedence.
+        if ($tokenLen === 1) {
+            $minGuesses = Scoring::MIN_SUBMATCH_GUESSES_SINGLE_CHAR;
+        } else {
+            $minGuesses = Scoring::MIN_SUBMATCH_GUESSES_MULTI_CHAR;
+        }
+
+        return min($guesses, $minGuesses);
+    }
+}
