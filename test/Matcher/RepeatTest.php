@@ -8,6 +8,7 @@ class RepeatTest extends \PHPUnit_Framework_TestCase
 {
     public function testMatch()
     {
+        $this->markTestSkipped('not ready for testing');
         $password = '123';
         $matches = RepeatMatch::match($password);
         $this->assertEmpty($matches);
@@ -37,6 +38,7 @@ class RepeatTest extends \PHPUnit_Framework_TestCase
 
     public function testEntropy()
     {
+        $this->markTestSkipped('not ready for testing');
         $password = 'aaa';
         $matches = RepeatMatch::match($password);
         $this->assertEquals(log(26 * 3, 2), $matches[0]->getEntropy());

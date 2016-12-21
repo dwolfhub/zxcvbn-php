@@ -68,6 +68,11 @@ class Scoring
      */
     protected $excludeAdditive;
 
+    /**
+     * Scoring constructor.
+     * @param $password
+     * @param bool $excludeAdditive
+     */
     public function __construct($password, $excludeAdditive = false)
     {
         $this->password = $password;
@@ -107,7 +112,13 @@ class Scoring
 
         for ($i = 0; $i < count($matchesByJ); $i++) {
             usort($matchesByJ[$i], function ($a, $b) {
-                return $a['i'] < $b['i'];
+                if ($a['i'] < $b['i']) {
+                    return -1;
+                } else if ($a['i'] === $b['i']) {
+                    return 0;
+                } else {
+                    return 1;
+                }
             });
         }
 
@@ -259,7 +270,7 @@ class Scoring
             }
         }
 
-        while ($k >= 0 ) {
+        while ($k >= 0) {
             $m = $this->optimal['m'][$k][$l];
             array_unshift($optimalMatchSequence, $m);
             $k = $m['i'] - 1;
@@ -280,7 +291,7 @@ class Scoring
 
         $minGuesses = 1;
         if (strlen($match['token']) < strlen($this->password)) {
-            if (strlen($match['token']) ===1 ) {
+            if (strlen($match['token']) === 1) {
                 $minGuesses = self::MIN_SUBMATCH_GUESSES_SINGLE_CHAR;
             } else {
                 $minGuesses = self::MIN_SUBMATCH_GUESSES_MULTI_CHAR;
@@ -288,10 +299,20 @@ class Scoring
         }
 
         $estimationFunctions = [
-            // todo
+            'bruteforce' => 'ZxcvbnPhp\Guess\BruteForceEstimator',
+            'dictionary' => 'ZxcvbnPhp\Guess\DictionaryEstimator',
+            'spatial' => 'ZxcvbnPhp\Guess\SpatialEstimator',
+            'repeat' => 'ZxcvbnPhp\Guess\RepeatEstimator',
+            'sequence' => 'ZxcvbnPhp\Guess\SequenceEstimator',
+            'regex' => 'ZxcvbnPhp\Guess\RegexEstimator',
+            'date' => 'ZxcvbnPhp\Guess\DateEstimator',
         ];
 
-        $guesses = $estimationFunctions[$match['pattern']]->match();
-        // todo
+        $estimator = new $estimationFunctions[$match['pattern']]($match);
+        $guesses = $estimationFunctions[$match['pattern']]->estimate();
+        $match['guesses'] = max($guesses, $minGuesses);
+        $match['guesses_log10'] = log($match['guesses'], 10);
+
+        return $match['guesses'];
     }
 }

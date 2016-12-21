@@ -2,289 +2,244 @@
 
 namespace ZxcvbnPhp\Match;
 
-class DateMatch extends Match
+use ZxcvbnPhp\Scoring;
+
+/**
+ *
+ * a "date" is recognized as:
+ * any 3-tuple that starts or ends with a 2- or 4-digit year,
+ * with 2 or 0 separator chars (1.1.91 or 1191),
+ * maybe zero-padded (01-01-91 vs 1-1-91),
+ * a month between 1 and 12,
+ * a day between 1 and 31.
+ *
+ * note: this isn't true date parsing in that "feb 31st" is allowed,
+ * this doesn't check for leap years, etc.
+ *
+ * recipe:
+ * start with regex to find maybe-dates, then attempt to map the integers
+ * onto month-day-year to filter the maybe-dates into dates.
+ * finally, remove matches that are substrings of other matches to reduce noise.
+ * note: instead of using a lazy or greedy regex to find many dates over the full string,
+ * this uses a ^...$ regex against every substring of the password -- less performant but leads
+ * to every possible date match.
+ *
+ * Class DateMatch
+ * @package Match
+ */
+class DateMatch extends AbstractMatch
 {
-
-    const NUM_YEARS = 119; // Years match against 1900 - 2019
-    const NUM_MONTHS = 12;
-    const NUM_DAYS = 31;
-
-    const DATE_RX_YEAR_SUFFIX = '/(\d{1,2})(\s|-|\/|\\|_|\.)(\d{1,2})\2(19\d{2}|200\d|201\d|\d{2})/';
-    const DATE_RX_YEAR_PREFIX = '/(19\d{2}|200\d|201\d|\d{2})(\s|-|\/|\\|_|\.)(\d{1,2})\2(\d{1,2})/';
+    /**
+     * @var int
+     */
+    const DATE_MAX_YEAR = 2050;
 
     /**
-     * @var
+     * @var int
      */
-    public $day;
+    const DATE_MIN_YEAR = 1000;
 
     /**
-     * @var
+     * @var array
      */
-    public $month;
+    const DATE_SPLITS = [
+        4 => [  # for length-4 strings, eg 1191 or 9111, two ways to split:
+            [1, 2],  # 1 1 91 (2nd split starts at index 1, 3rd at index 2)
+            [2, 3],  # 91 1 1
+        ],
+        5 => [
+            [1, 3],  # 1 11 91
+            [2, 3],  # 11 1 91
+        ],
+        6 => [
+            [1, 2],  # 1 1 1991
+            [2, 4],  # 11 11 91
+            [4, 5],  # 1991 1 1
+        ],
+        7 => [
+            [1, 3],  # 1 11 1991
+            [2, 3],  # 11 1 1991
+            [4, 5],  # 1991 1 11
+            [4, 6],  # 1991 11 1
+        ],
+        8 => [
+            [2, 4],  # 11 11 1991
+            [4, 6],  # 1991 11 11
+        ],
+    ];
 
     /**
-     * @var
+     * {@inheritdoc}
      */
-    public $year;
-
-    /**
-     * @var
-     */
-    public $separator;
-
-    /**
-     * Match occurences of dates in a password
-     *
-     * @copydoc Match::match()
-     */
-    public static function match($password, array $userInputs = array())
+    public function getMatches()
     {
-        $matches = array();
-        $dates = static::datesWithoutSeparators($password) + static::datesWithSeparators($password);
-        foreach ($dates as $date) {
-            $matches[] = new static($password, $date['begin'], $date['end'], $date['token'], $date);
-        }
-        return $matches;
-    }
+        $matches = [];
+        $maybeDateNoSeparator = '/^\d{4,8}$/';
+        $maybeDateWithSeparator = '/^(\d{1,4})([\s/\\_.-])(\d{1,2})\2(\d{1,4})$/';
 
-    /**
-     * @param $password
-     * @param $begin
-     * @param $end
-     * @param $token
-     * @param array $params
-     *   Array with keys: day, month, year, separator.
-     */
-    public function __construct($password, $begin, $end, $token, $params)
-    {
-        parent::__construct($password, $begin, $end, $token);
-        $this->pattern = 'date';
-        $this->day = $params['day'];
-        $this->month = $params['month'];
-        $this->year = $params['year'];
-        $this->separator = $params['separator'];
-    }
-
-    /**
-     * Get match entropy.
-     *
-     * @return float
-     */
-    public function getEntropy()
-    {
-        if ($this->year < 100) {
-            // two-digit year
-            $entropy = $this->log(self::NUM_DAYS * self::NUM_MONTHS * 100);
-        }
-        else {
-            // four-digit year
-            $entropy = $this->log(self::NUM_DAYS * self::NUM_MONTHS * self::NUM_YEARS);
-        }
-        // add two bits for separator selection [/,-,.,etc]
-        if (!empty($this->separator)) {
-            $entropy += 2;
-        }
-        return $entropy;
-    }
-
-    /**
-     * Find dates with separators in a password.
-     *
-     * @param string $password
-     * @return array
-     */
-    protected static function datesWithSeparators($password)
-    {
-        $dates = array();
-        foreach (static::findAll($password, static::DATE_RX_YEAR_SUFFIX) as $captures) {
-            $date = array(
-                'day'   => (integer) $captures[1]['token'],
-                'month' => (integer) $captures[3]['token'],
-                'year'  => (integer) $captures[4]['token'],
-                'sep'   => $captures[2]['token'],
-                'begin' => $captures[0]['begin'],
-                'end'   => $captures[0]['end'],
-            );
-            $dates[] = $date;
-        }
-        foreach (static::findAll($password, static::DATE_RX_YEAR_PREFIX) as $captures) {
-            $date = array(
-                'day'   => (integer) $captures[4]['token'],
-                'month' => (integer) $captures[3]['token'],
-                'year'  => (integer) $captures[1]['token'],
-                'sep'   => $captures[2]['token'],
-                'begin' => $captures[0]['begin'],
-                'end'   => $captures[0]['end'],
-            );
-            $dates[] = $date;
-        }
-
-        $results = array();
-        foreach ($dates as $candidate) {
-            $date = static::checkDate($candidate['day'], $candidate['month'], $candidate['year']);
-
-            if ($date === false) {
-                continue;
-            }
-            list($day, $month, $year) = $date;
-
-            $results[] = array(
-                'pattern' => 'date',
-                'begin' => $candidate['begin'],
-                'end' => $candidate['end'],
-                'token' => substr($password, $candidate['begin'], $candidate['begin'] + $candidate['end'] - 1),
-                'separator' => $candidate['sep'],
-                'day' => $day,
-                'month' => $month,
-                'year' => $year
-            );
-        }
-
-        return $results;
-    }
-
-    /**
-     * Find dates without separators in a password.
-     *
-     * @param string $password
-     * @return array
-     */
-    protected static function datesWithoutSeparators($password)
-    {
-        $dateMatches = array();
-
-        // 1197 is length-4, 01011997 is length 8
-        foreach (static::findAll($password, '/(\d{4,8})/') as $captures) {
-            $capture = $captures[1];
-            $begin = $capture['begin'];
-            $end = $capture['end'];
-
-            $token = $capture['token'];
-            $tokenLen = strlen($token);
-
-            // Create year candidates.
-            $candidates1 = array();
-            if ($tokenLen <= 6) {
-                // 2 digit year prefix (990112)
-                $candidates1[] = array(
-                    'daymonth' => substr($token, 2),
-                    'year' => substr($token, 0, 2),
-                    'begin' => $begin,
-                    'end' => $end
-                );
-                // 2 digit year suffix (011299)
-                $candidates1[] = array(
-                    'daymonth' => substr($token, 0, ($tokenLen - 2)),
-                    'year' => substr($token, -2),
-                    'begin' => $begin,
-                    'end' => $end
-                );
-            }
-            if ($tokenLen >= 6) {
-                // 4 digit year prefix (199912)
-                $candidates1[] = array(
-                    'daymonth' => substr($token, 4),
-                    'year' => substr($token, 0, 4),
-                    'begin' => $begin,
-                    'end' => $end
-                );
-                // 4 digit year suffix (121999)
-                $candidates1[] = array(
-                    'daymonth' => substr($token, 0, ($tokenLen - 4)),
-                    'year' => substr($token, -4),
-                    'begin' => $begin,
-                    'end' => $end
-                );
-            }
-            // Create day/month candidates from years.
-            $candidates2 = array();
-            foreach ($candidates1 as $candidate) {
-                switch (strlen($candidate['daymonth'])) {
-                    case 2: // ex. 1 1 97
-                        $candidates2[] = array(
-                            'day' => $candidate['daymonth'][0],
-                            'month' => $candidate['daymonth'][1],
-                            'year' => $candidate['year'],
-                            'begin' => $candidate['begin'],
-                            'end' => $candidate['end']
-                        );
-                        break;
-                    case 3: // ex. 11 1 97 or 1 11 97
-                        $candidates2[] = array(
-                            'day' => substr($candidate['daymonth'], 0, 2),
-                            'month' => substr($candidate['daymonth'], 2),
-                            'year' => $candidate['year'],
-                            'begin' => $candidate['begin'],
-                            'end' => $candidate['end']
-                        );
-                        $candidates2[] = array(
-                            'day' => substr($candidate['daymonth'], 0, 1),
-                            'month' => substr($candidate['daymonth'], 1, 3),
-                            'year' => $candidate['year'],
-                            'begin' => $candidate['begin'],
-                            'end' => $candidate['end']
-                        );
-                        break;
-                    case 4: // ex. 11 11 97
-                        $candidates2[] = array(
-                            'day' => substr($candidate['daymonth'], 0, 2),
-                            'month' => substr($candidate['daymonth'], 2, 4),
-                            'year' => $candidate['year'],
-                            'begin' => $candidate['begin'],
-                            'end' => $candidate['end']
-                        );
-                        break;
+        // dates without separators are between length 4 '1191' and 8 '11111991'
+        for ($i = 0; $i < strlen($this->password) - 3; $i++) {
+            for ($j = $i + 3; $j < $i + 8; $i++) {
+                if ($j >= strlen($this->password)) {
+                    break;
                 }
-            }
-            // Reject invalid candidates
-            foreach ($candidates2 as $candidate) {
-                $day = (integer) $candidate['day'];
-                $month = (integer) $candidate['month'];
-                $year = (integer) $candidate['year'];
 
-                $date = static::checkDate($day, $month, $year);
-                if ($date === false) {
+                $token = substr($this->password, $i, $j - $i);
+                if (!preg_match($maybeDateNoSeparator, $token)) {
                     continue;
                 }
-                list($day, $month, $year) = $date;
 
-                $dateMatches[] = array(
-                    'begin' => $candidate['begin'],
-                    'end' => $candidate['end'],
-                    'token' => substr($password, $begin, $begin + $end - 1),
+                $candidates = [];
+                foreach (self::DATE_SPLITS[strlen($token)] as $k => $l) {
+                    $dmy = $this->mapIntsToDMY([
+                        (int)substr($token, 0, $k),
+                        (int)substr($token, $k, $l - $k),
+                        (int)substr($token, $l),
+                    ]);
+                    if ($dmy) {
+                        array_push($candidates, $dmy);
+                    }
+                }
+                if (empty($candidates)) {
+                    continue;
+                }
+
+                // at this point: different possible dmy mappings for the same i,j
+                // substring. match the candidate date that likely takes the fewest
+                // guesses: a year closest to 2000. (scoring.REFERENCE_YEAR).
+
+                // ie, considering '111504', prefer 11-15-04 to 1-1-1504
+                // (interpreting '04' as 2004)
+                $bestCandidate = $candidates[0];
+                $minDistance = $this->metric($bestCandidate);
+
+                foreach (array_splice($candidates, 1) as $candidate) {
+                    $distance = $this->metric($candidate);
+                    if ($distance < $minDistance) {
+                        $bestCandidate = $candidate;
+                        $minDistance = $distance;
+                    }
+                }
+
+                array_push($matches, [
+                    'pattern' => 'date',
+                    'token' => $token,
+                    'i' => $i,
+                    'j' => $j,
                     'separator' => '',
-                    'day' => $day,
-                    'month' => $month,
-                    'year' => $year
-                );
+                    'year' => $bestCandidate['year'],
+                    'month' => $bestCandidate['month'],
+                    'day' => $bestCandidate['day'],
+                ]);
             }
         }
-        return $dateMatches;
+
+        // todo
     }
 
     /**
-     * Validate date.
-     *
-     * @param int $day
-     * @param int $month
-     * @param int $year
-     *
-     * @return array|false
+     * @param $candidate
+     * @return number
      */
-    protected static function checkDate($day, $month, $year)
+    protected function metric($candidate)
     {
-        // Tolerate both day-month and month-day order
-        if ((12 <= $month && $month <= 31) && $day <= 12) {
-            $m = $month;
-            $month = $day;
-            $day = $m;
+        return abs($candidate['year'] - Scoring::REFERENCE_YEAR);
+    }
+
+    /**
+     * given a 3-tuple, discard if:
+     * middle int is over 31 (for all dmy formats, years are never allowed in
+     * the middle)
+     * middle int is zero
+     * any int is over the max allowable year
+     * any int is over two digits but under the min allowable year
+     * 2 ints are over 31, the max allowable day
+     * 2 ints are zero
+     * all ints are over 12, the max allowable month
+     *
+     * @param $ints
+     * @return mixed
+     */
+    protected function mapIntsToDMY($ints)
+    {
+        if ($ints[1] > 31 or $ints[1] <= 0) {
+            return;
         }
-        if ($day > 31 || $month > 12) {
-            return false;
+
+        $over12 = 0;
+        $over31 = 0;
+        $under1 = 0;
+
+        foreach ($ints as $int) {
+            if ((99 < $int and $int < self::DATE_MIN_YEAR) or $int > self::DATE_MAX_YEAR) {
+                return;
+            }
+            if ($int > 31) {
+                $over31++;
+            }
+            if ($int > 12) {
+                $over12++;
+            }
+            if ($int <= 0) {
+                $under1++;
+            }
         }
-        if (!((1900 <= $year && $year <= 2019))) {
-            return false;
+
+        if ($over31 >= 2 or $over12 == 3 or $under1 >= 2) {
+            return;
         }
-        return array($day, $month, $year);
+
+        $possibleFourDigitSplits = [
+            [$ints[2], array_splice($ints, 0, 2)],
+            [$ints[0], array_splice($ints, 1, 3)],
+        ];
+        foreach ($possibleFourDigitSplits as $y => $rest) {
+            if (self::DATE_MIN_YEAR <= $y and $y <= self::DATE_MAX_YEAR) {
+                $dm = $this->mapIntsToDMY($rest);
+                if ($dm) {
+                    return [
+                        'year' => $y,
+                        'month' => $dm['month'],
+                        'day' => $dm['day'],
+                    ];
+                } else {
+                    // for a candidate that includes a four-digit year,
+                    // when the remaining ints don't match to a day and month,
+                    // it is not a date.
+                    return;
+                }
+            }
+        }
+
+        // given no four-digit year, two digit years are the most flexible int to
+        // match, so try to parse a day-month out of ints[0..1] or ints[1..0]
+        foreach ($possibleFourDigitSplits as $y => $rest) {
+            $dm = $this->mapIntsToDMY($rest);
+            if ($dm) {
+                $y = $this->twoToFourDigitYear($y);
+                return [
+                    'year' => $y,
+                    'month' => $dm['month'],
+                    'day' => $dm['day'],
+                ];
+            }
+        }
+    }
+
+    /**
+     * @param $year
+     * @return mixed
+     */
+    protected function twoToFourDigitYear($year)
+    {
+        if ($year > 99) {
+            return $year;
+        } else if ($year > 50) {
+            // 87 -> 1987
+            return $year + 1900;
+        } else {
+            // 15 -> 2015
+            return $year + 2000;
+        }
     }
 }

@@ -8,6 +8,7 @@ class BruteforceTest extends \PHPUnit_Framework_TestCase
 {
     public function testCardinality()
     {
+        $this->markTestSkipped('not ready for testing');
         $match = new Bruteforce('99', 0, 1, '99');
         $this->assertSame(10, $match->getCardinality());
 
@@ -25,6 +26,7 @@ class BruteforceTest extends \PHPUnit_Framework_TestCase
 
     public function testEntropy()
     {
+        $this->markTestSkipped('not ready for testing');
         $match = new Bruteforce('99', 0, 1, '99');
         $this->assertSame(log(pow(10, 2), 2), $match->getEntropy());
 

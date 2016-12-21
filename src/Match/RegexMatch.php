@@ -2,7 +2,7 @@
 
 namespace ZxcvbnPhp\Match;
 
-class L33tMatch extends AbstractMatch
+class RegexMatch extends AbstractMatch
 {
 
 }

@@ -8,6 +8,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
 {
     public function testMatch()
     {
+        $this->markTestSkipped('not ready for testing');
         $password = 'password';
         $matches = DateMatch::match($password);
         $this->assertEmpty($matches);
@@ -67,6 +68,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
 
     public function testEntropy()
     {
+        $this->markTestSkipped('not ready for testing');
         $password = '121997';
         $matches = DateMatch::match($password);
         $this->assertSame(log(119 * 12 * 31, 2), $matches[0]->getEntropy());
