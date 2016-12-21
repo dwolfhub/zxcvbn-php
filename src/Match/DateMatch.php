@@ -134,7 +134,30 @@ class DateMatch extends AbstractMatch
             }
         }
 
-        // todo
+        // matches now contains all valid date strings in a way that is tricky to
+        // capture with regexes only. while thorough, it will contain some
+        // unintuitive noise:
+
+        // '2015_06_04', in addition to matching 2015_06_04, will also contain
+        // 5(!) other date matches: 15_06_04, 5_06_04, ..., even 2015
+        // (matched as 5/1/2020)
+
+        // to reduce noise, remove date matches that are strict substrings of others
+        usort($matches, [$this, 'sortByIAndJ']);
+
+        return array_filter($matches, function ($match) use ($matches) {
+            $isSubmatch = false;
+            foreach ($matches as $other) {
+                if ($match === $other) {
+                    continue;
+                }
+                if ($other['i'] <= $match['i'] and $other['j'] >= $match['j']) {
+                    $isSubmatch = true;
+                    break;
+                }
+            }
+            return !$isSubmatch;
+        });
     }
 
     /**
