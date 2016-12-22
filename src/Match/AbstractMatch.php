@@ -14,6 +14,11 @@ abstract class AbstractMatch
     protected $password;
 
     /**
+     * @var array
+     */
+    protected $rankedDictionaries;
+
+    /**
      * AbstractMatch constructor.
      * @param $password
      */
@@ -41,6 +46,42 @@ abstract class AbstractMatch
         } else {
             return 1;
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function getRankedDictionaries()
+    {
+        if (empty($this->rankedDictionaries)) {
+            $this->rankedDictionaries = [];
+            foreach (FrequencyLists::getData() as $name => $lst) {
+                $this->rankedDictionaries[$name] = $this->buildRankedDict($lst);
+            }
+        }
+
+        return $this->rankedDictionaries;
+    }
+
+    /**
+     * @param array $rankedDictionaries
+     */
+    public function setRankedDictionaries(array $rankedDictionaries)
+    {
+        $this->rankedDictionaries = $rankedDictionaries;
+    }
+
+    /**
+     * @param array $orderedList
+     * @return array
+     */
+    protected function buildRankedDict(array $orderedList)
+    {
+        $result = [];
+        for ($i = 1; $i <= count($orderedList); $i++) {
+            $result[$orderedList[$i - 1]] = $i;
+        }
+        return $result;
     }
 
     /**

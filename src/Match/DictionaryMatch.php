@@ -11,11 +11,6 @@ use ZxcvbnPhp\Match\DataProvider\FrequencyLists;
 class DictionaryMatch extends AbstractMatch
 {
     /**
-     * @var array
-     */
-    protected $rankedDictionaries;
-
-    /**
      * {@inheritdoc}
      */
     public function getMatches()
@@ -50,39 +45,4 @@ class DictionaryMatch extends AbstractMatch
         return $matches;
     }
 
-    /**
-     * @return array
-     */
-    public function getRankedDictionaries()
-    {
-        if (empty($this->rankedDictionaries)) {
-            $this->rankedDictionaries = [];
-            foreach (FrequencyLists::getData() as $name => $lst) {
-                $this->rankedDictionaries[$name] = $this->buildRankedDict($lst);
-            }
-        }
-
-        return $this->rankedDictionaries;
-    }
-
-    /**
-     * @param array $rankedDictionaries
-     */
-    public function setRankedDictionaries(array $rankedDictionaries)
-    {
-        $this->rankedDictionaries = $rankedDictionaries;
-    }
-
-    /**
-     * @param array $orderedList
-     * @return array
-     */
-    protected function buildRankedDict(array $orderedList)
-    {
-        $result = [];
-        for ($i = 1; $i <= count($orderedList); $i++) {
-            $result[$orderedList[$i - 1]] = $i;
-        }
-        return $result;
-    }
 }

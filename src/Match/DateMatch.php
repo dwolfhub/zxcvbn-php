@@ -113,7 +113,7 @@ class DateMatch extends AbstractMatch
                 $bestCandidate = $candidates[0];
                 $minDistance = $this->metric($bestCandidate);
 
-                foreach (array_splice($candidates, 1) as $candidate) {
+                foreach (array_slice($candidates, 1) as $candidate) {
                     $distance = $this->metric($candidate);
                     if ($distance < $minDistance) {
                         $bestCandidate = $candidate;
@@ -213,8 +213,8 @@ class DateMatch extends AbstractMatch
         }
 
         $possibleFourDigitSplits = [
-            [$ints[2], array_splice($ints, 0, 2)],
-            [$ints[0], array_splice($ints, 1, 3)],
+            [$ints[2], array_slice($ints, 0, 2)],
+            [$ints[0], array_slice($ints, 1, 3)],
         ];
         foreach ($possibleFourDigitSplits as $y => $rest) {
             if (self::DATE_MIN_YEAR <= $y and $y <= self::DATE_MAX_YEAR) {
