@@ -21,19 +21,6 @@ abstract class AbstractMatch
     protected $rankedDictionaries;
 
     /**
-     * AbstractMatch constructor.
-     * @param $password
-     */
-    public function __construct()
-    {
-        // todo refactor this
-        $this->rankedDictionaries = [];
-        foreach (FrequencyLists::getData() as $name => $lst) {
-            $this->rankedDictionaries[$name] = $this->buildRankedDict($lst);
-        }
-    }
-
-    /**
      * @return string
      */
     public function getPassword()
@@ -60,9 +47,12 @@ abstract class AbstractMatch
     /**
      * @param array $rankedDictionaries
      */
-    public function setRankedDictionaries(array $rankedDictionaries)
+    public function setRankedDictionaries(array $dictionaries)
     {
-        $this->rankedDictionaries = $rankedDictionaries;
+        $this->rankedDictionaries = [];
+        foreach ($dictionaries as $name => $lst) {
+            $this->rankedDictionaries[$name] = $this->buildRankedDict($lst);
+        }
     }
 
     /**
@@ -75,11 +65,13 @@ abstract class AbstractMatch
     }
 
     /**
+     * usort function, compares 'i' then 'j' indexes
+     * @param array $a
+     * @param array $b
      * @return int
      */
-    public function sortByIAndJ($a, $b)
+    protected static function sortByIAndJ($a, $b)
     {
-        // compare ['i'] then ['j']
         if ($a['i'] < $b['i']) {
             return -1;
         } else if ($a['i'] === $b['i']) {

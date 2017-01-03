@@ -3,6 +3,7 @@
 namespace Zxcvbn;
 
 use Zxcvbn\Match\AbstractMatch;
+use Zxcvbn\Match\DataProvider\FrequencyLists;
 use Zxcvbn\Match\OmniMatch;
 
 class Zxcvbn
@@ -57,8 +58,11 @@ class Zxcvbn
      */
     public static function passwordStrength($password, array $userInputs = [])
     {
+        $omniMatch= new OmniMatch();
+        $omniMatch->setRankedDictionaries(FrequencyLists::getData());
+
         $cls = new static(
-            new OmniMatch(),
+            $omniMatch,
             new Scoring(),
             new TimeEstimates(),
             new Feedback()
@@ -86,8 +90,7 @@ class Zxcvbn
 
         $matches = $this->omniMatch->getMatches();
 
-        $this->scoring->setExcludeAdditive(empty($matches) === false);
-        $result = $this->scoring->mostGuessableMatchSequence($matches);
+        $result = $this->scoring->mostGuessableMatchSequence($password, $matches, empty($matches) === false);
 
         $result['calc_time'] = microtime(true) - $start;
         $result += $this->timeEstimates->estimateAttackTimes($result['guesses']);

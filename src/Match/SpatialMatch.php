@@ -14,17 +14,6 @@ class SpatialMatch extends AbstractMatch
     /**
      * {@inheritdoc}
      */
-    public function __construct()
-    {
-        parent::__construct();
-
-        // todo refactor this
-        $this->graphs = AdjacencyGraphs::getData();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getMatches()
     {
         $matches = [];
@@ -35,6 +24,22 @@ class SpatialMatch extends AbstractMatch
         usort($matches, [$this, 'sortByIAndJ']);
 
         return $matches;
+    }
+
+    /**
+     * @return array
+     */
+    public function getGraphs()
+    {
+        return $this->graphs;
+    }
+
+    /**
+     * @param array $graphs
+     */
+    public function setGraphs(array $graphs)
+    {
+        $this->graphs = $graphs;
     }
 
     /**

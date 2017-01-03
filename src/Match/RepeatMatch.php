@@ -27,10 +27,6 @@ class RepeatMatch extends AbstractMatch
      */
     public function getMatches()
     {
-        // todo refactor this
-        $this->scoring = new Scoring($this->password);
-        $this->omniMatch = new OmniMatch($this->password);
-
         $matches = [];
         $greedy = '/(.+)\1+/';
         $lazy = '/(.+?)\1+/';
@@ -66,6 +62,7 @@ class RepeatMatch extends AbstractMatch
 
             // recursively match and score the base string
             $baseAnalysis = $this->scoring->mostGuessableMatchSequence(
+                $this->password,
                 $this->omniMatch->getMatches()
             );
             $baseMatches = $baseAnalysis['sequence'];

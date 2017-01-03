@@ -18,9 +18,6 @@ class ReverseDictionaryMatch extends AbstractMatch
      */
     public function getMatches()
     {
-        // todo refactor this
-        $this->dictionaryMatch = new DictionaryMatch(strrev($this->password));
-
         $matches = $this->dictionaryMatch->getMatches();
         $processedMatches = [];
         foreach ($matches as $match) {
@@ -36,4 +33,21 @@ class ReverseDictionaryMatch extends AbstractMatch
 
         return $processedMatches;
     }
+
+    /**
+     * @return DictionaryMatch
+     */
+    public function getDictionaryMatch(): DictionaryMatch
+    {
+        return $this->dictionaryMatch;
+    }
+
+    /**
+     * @param DictionaryMatch $dictionaryMatch
+     */
+    public function setDictionaryMatch(DictionaryMatch $dictionaryMatch)
+    {
+        $this->dictionaryMatch = $dictionaryMatch;
+    }
+
 }

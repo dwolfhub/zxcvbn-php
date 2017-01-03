@@ -181,12 +181,12 @@ class DateMatch extends AbstractMatch
      * all ints are over 12, the max allowable month
      *
      * @param $ints
-     * @return mixed
+     * @return null|array
      */
     protected function mapIntsToDMY($ints)
     {
         if ($ints[1] > 31 or $ints[1] <= 0) {
-            return;
+            return null;
         }
 
         $over12 = 0;
@@ -195,7 +195,7 @@ class DateMatch extends AbstractMatch
 
         foreach ($ints as $int) {
             if ((99 < $int and $int < self::DATE_MIN_YEAR) or $int > self::DATE_MAX_YEAR) {
-                return;
+                return null;
             }
             if ($int > 31) {
                 $over31++;
@@ -209,7 +209,7 @@ class DateMatch extends AbstractMatch
         }
 
         if ($over31 >= 2 or $over12 == 3 or $under1 >= 2) {
-            return;
+            return null;
         }
 
         $possibleFourDigitSplits = [
@@ -229,7 +229,7 @@ class DateMatch extends AbstractMatch
                     // for a candidate that includes a four-digit year,
                     // when the remaining ints don't match to a day and month,
                     // it is not a date.
-                    return;
+                    return null;
                 }
             }
         }
@@ -247,6 +247,8 @@ class DateMatch extends AbstractMatch
                 ];
             }
         }
+
+        return null;
     }
 
     /**

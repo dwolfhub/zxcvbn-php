@@ -11,6 +11,24 @@ class L33tMatch extends AbstractMatch
     /**
      * @var array
      */
+    const DEFAULT_L33T_TABLE = [
+        'a' => ['4', '@'],
+        'b' => ['8'],
+        'c' => ['(', '{', '[', '<'],
+        'e' => ['3'],
+        'g' => ['6', '9'],
+        'i' => ['1', '!', '|'],
+        'l' => ['1', '|', '7'],
+        'o' => ['0'],
+        's' => ['$', '5'],
+        't' => ['+', '7'],
+        'x' => ['%'],
+        'z' => ['2'],
+    ];
+
+    /**
+     * @var array
+     */
     protected $l33tTable;
 
     /**
@@ -18,40 +36,11 @@ class L33tMatch extends AbstractMatch
      */
     protected $dictionaryMatch;
 
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        // todo refactor this
-        $this->l33tTable = [
-            'a' => ['4', '@'],
-            'b' => ['8'],
-            'c' => ['(', '{', '[', '<'],
-            'e' => ['3'],
-            'g' => ['6', '9'],
-            'i' => ['1', '!', '|'],
-            'l' => ['1', '|', '7'],
-            'o' => ['0'],
-            's' => ['$', '5'],
-            't' => ['+', '7'],
-            'x' => ['%'],
-            'z' => ['2'],
-        ];
-
-    }
-
     /**
      * {@inheritdoc}
      */
     public function getMatches()
     {
-        // todo refactor this
-        $this->dictionaryMatch = new DictionaryMatch($this->password);
-
         $matches = [];
 
         foreach ($this->enumerateL33tSubs() as $sub) {
@@ -111,6 +100,22 @@ class L33tMatch extends AbstractMatch
     public function setL33tTable(array $l33tTable)
     {
         $this->l33tTable = $l33tTable;
+    }
+
+    /**
+     * @return AbstractMatch
+     */
+    public function getDictionaryMatch()
+    {
+        return $this->dictionaryMatch;
+    }
+
+    /**
+     * @param AbstractMatch $dictionaryMatch
+     */
+    public function setDictionaryMatch(AbstractMatch $dictionaryMatch)
+    {
+        $this->dictionaryMatch = $dictionaryMatch;
     }
 
     /**
