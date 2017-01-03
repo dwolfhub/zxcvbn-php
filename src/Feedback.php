@@ -1,10 +1,10 @@
 <?php
 
-namespace ZxcvbnPhp;
+namespace Zxcvbn;
 
 /**
  * Class Feedback
- * @package ZxcvbnPhp
+ * @package Zxcvbn
  */
 class Feedback
 {

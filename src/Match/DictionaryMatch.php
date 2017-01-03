@@ -1,12 +1,12 @@
 <?php
 
-namespace ZxcvbnPhp\Match;
+namespace Zxcvbn\Match;
 
-use ZxcvbnPhp\Match\DataProvider\FrequencyLists;
+use Zxcvbn\Match\DataProvider\FrequencyLists;
 
 /**
  * Class DictionaryMatch
- * @package ZxcvbnPhp\Match
+ * @package Zxcvbn\Match
  */
 class DictionaryMatch extends AbstractMatch
 {

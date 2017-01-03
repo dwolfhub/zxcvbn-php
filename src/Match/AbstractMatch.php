@@ -1,6 +1,6 @@
 <?php
 
-namespace ZxcvbnPhp\Match;
+namespace Zxcvbn\Match;
 
 /**
  * Class AbstractMatch
@@ -69,6 +69,22 @@ abstract class AbstractMatch
     public function setRankedDictionaries(array $rankedDictionaries)
     {
         $this->rankedDictionaries = $rankedDictionaries;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * @param string $password
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
     }
 
     /**

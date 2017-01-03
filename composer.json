@@ -1,29 +1,30 @@
 {
-  "name": "bjeavons/zxcvbn-php",
-  "type": "library",
-  "description": "Realistic password strength estimation PHP library based on Zxcvbn JS",
-  "keywords": [
-    "zxcvbn",
-    "password"
-  ],
-  "homepage": "https://github.com/bjeavons/zxcvbn-php",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "See contributors",
-      "homepage": "https://github.com/bjeavons/zxcvbn-php"
+    "name": "bjeavons/zxcvbn-php",
+    "type": "library",
+    "description": "Realistic password strength estimation PHP library based on zxcvbn JS",
+    "keywords": [
+        "zxcvbn",
+        "password",
+        "security"
+    ],
+    "homepage": "https://github.com/bjeavons/zxcvbn-php",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "See contributors",
+            "homepage": "https://github.com/bjeavons/zxcvbn-php"
+        }
+    ],
+    "require": {
+        "php": "^5.5 || ^7.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.7",
+        "satooshi/php-coveralls": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Zxcvbn\\": "src/"
+        }
     }
-  ],
-  "require": {
-    "php": "^5.5 || ^7.0"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "^5.7",
-    "satooshi/php-coveralls": "^1.0"
-  },
-  "autoload": {
-    "psr-4": {
-      "ZxcvbnPhp\\": "src/"
-    }
-  }
 }

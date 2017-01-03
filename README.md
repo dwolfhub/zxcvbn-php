@@ -19,7 +19,7 @@ The library can be installed with [Composer](http://getcomposer.org) by adding i
 ```
 
 After running `php composer.phar update` on the command line, include the
-autoloader in your PHP scripts so that the ZxcvbnPhp class is available.
+autoloader in your PHP scripts so that the Zxcvbn class is available.
 
 ```php
 require_once 'vendor/autoload.php';
@@ -28,7 +28,7 @@ require_once 'vendor/autoload.php';
 ## Usage
 
 ```php
-use ZxcvbnPhp\Zxcvbn;
+use Zxcvbn\Zxcvbn;
 
 $userData = array(
   'Marco',

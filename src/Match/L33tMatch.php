@@ -1,13 +1,45 @@
 <?php
 
-namespace ZxcvbnPhp\Match;
+namespace Zxcvbn\Match;
 
 /**
  * Class L33tMatch
- * @package ZxcvbnPhp\Match
+ * @package Zxcvbn\Match
  */
 class L33tMatch extends AbstractMatch
 {
+    /**
+     * @var array
+     */
+    protected $l33tTable;
+
+    /**
+     * @var AbstractMatch
+     */
+    protected $dictionaryMatch;
+
+    public function __construct($password)
+    {
+        parent::__construct($password);
+
+        $this->l33tTable = [
+            'a' => ['4', '@'],
+            'b' => ['8'],
+            'c' => ['(', '{', '[', '<'],
+            'e' => ['3'],
+            'g' => ['6', '9'],
+            'i' => ['1', '!', '|'],
+            'l' => ['1', '|', '7'],
+            'o' => ['0'],
+            's' => ['$', '5'],
+            't' => ['+', '7'],
+            'x' => ['%'],
+            'z' => ['2'],
+        ];
+
+        $this->dictionaryMatch = new DictionaryMatch($password);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -15,21 +47,121 @@ class L33tMatch extends AbstractMatch
     {
         $matches = [];
 
-        foreach ($this->enumerateL33tSubs($table) as $sub) {
+        foreach ($this->enumerateL33tSubs() as $sub) {
+            if (!count($sub)) {
+                break;
+            }
 
+            $subbedPassword = $this->translate($sub);
+            $this->dictionaryMatch->setPassword($subbedPassword);
+            foreach ($this->dictionaryMatch->getMatches() as $match) {
+                $token = substr($this->password, $match['i'], $match['j'] - $match['i'] + 1);
+                if (strtolower($token) === $match['matched_word']) {
+                    // only return the matches that contain an actual substitution
+                    continue;
+                }
+
+                // subset of mappings in sub that are in use for this match
+                $matchSub = [];
+                foreach ($sub as $subbedChr => $chr) {
+                    if (strpos($token, $subbedPassword) !== false) {
+                        $matchSub[$subbedChr] = $chr;
+                    }
+                }
+                $match['l33t'] = true;
+                $match['token'] = $token;
+                $match['sub'] = $matchSub;
+
+                $subDisplays = [];
+                foreach ($matchSub as $k => $v) {
+                    $subDisplays[] = sprintf('%s -> %s', $k, $v);
+                }
+                $match['sub_display'] = implode(', ', $subDisplays);
+                array_push($matches, $match);
+            }
         }
+
+        $matches = array_filter($matches, function ($item) {
+            return strlen($item['token']) > 1;
+        });
+
+        usort($matches, [$this, 'sortByIAndJ']);
+
+        return $matches;
+    }
+
+    /**
+     * @return array
+     */
+    public function getL33tTable()
+    {
+        return $this->l33tTable;
+    }
+
+    /**
+     * @param array $l33tTable
+     */
+    public function setL33tTable(array $l33tTable)
+    {
+        $this->l33tTable = $l33tTable;
+    }
+
+    /**
+     * @param $string
+     * @param $chrMap
+     * @return string
+     */
+    protected function translate($chrMap)
+    {
+        $chars = [];
+        foreach (str_split($this->password) as $char) {
+            if (!empty($chrMap[$char])) {
+                array_push($chars, $chrMap[$char]);
+            } else {
+                array_push($chars, $char);
+            }
+        }
+
+        return implode('', $chars);
+    }
+
+    /**
+     * @param $table
+     * @return array
+     */
+    protected function relevantL33tSubtable($table)
+    {
+        $passwordChars = [];
+        foreach (str_split($this->password) as $char) {
+            $passwordChars[$char] = true;
+        }
+
+        $subTable = [];
+        foreach ($table as $letter => $subs) {
+            $relevantSubs = [];
+            foreach ($subs as $sub) {
+                if (in_array($sub, $passwordChars)) {
+                    $relevantSubs[] = $sub;
+                }
+            }
+            if (!empty($relevantSubs)) {
+                $subTable[$letter] = $relevantSubs;
+            }
+        }
+
+        return $subTable;
     }
 
     /**
      * @param array $table
      * @return array
      */
-    protected function enumerateL33tSubs($table)
+    protected function enumerateL33tSubs()
     {
-        $keys = array_keys($table);
+        $keys = array_keys($this->l33tTable);
         $subs = [[]];
 
-        $subs = $this->helper($keys, $subs, $table);
+        $subs = $this->helper($keys, $subs);
         $subDicts = []; // convert from assoc lists to dicts
         foreach ($subs as $sub) {
             $subDict = [];
@@ -57,7 +189,7 @@ class L33tMatch extends AbstractMatch
             sort($assoc);
             $labels = [];
             foreach ($assoc as $k => $v) {
-                $labels[] = $k.','.$v;
+                $labels[] = $k . ',' . $v;
             }
             $label = implode('-', $labels);
             if (!array_key_exists($label, $members)) {
@@ -73,7 +205,7 @@ class L33tMatch extends AbstractMatch
      * @param $keys
      * @param $subs
      */
-    protected function helper($keys, $subs, $table)
+    protected function helper($keys, $subs)
     {
         if (empty($keys)) {
             return $subs;
@@ -81,8 +213,8 @@ class L33tMatch extends AbstractMatch
 
         $firstKey = $keys[0];
         $restKeys = array_slice($keys, 1);
-        $nextSubs=[];
-        foreach ($table[$firstKey] as $l33tChr) {
+        $nextSubs = [];
+        foreach ($this->l33tTable[$firstKey] as $l33tChr) {
             foreach ($subs as $sub) {
                 $dupL33tIndex = -1;
                 for ($i = 0; $i < strlen($sub); $i++) {
@@ -107,7 +239,7 @@ class L33tMatch extends AbstractMatch
 
         $subs = $this->deDup($nextSubs);
 
-        return $this->helper($restKeys, $subs, $table);
+        return $this->helper($restKeys, $subs);
     }
 
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace ZxcvbnPhp;
+namespace Zxcvbn;
 
 /**
  * Class TimeEstimates
- * @package ZxcvbnPhp
+ * @package Zxcvbn
  */
 class TimeEstimates
 {

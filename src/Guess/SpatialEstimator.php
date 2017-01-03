@@ -1,11 +1,11 @@
 <?php
-namespace ZxcvbnPhp\Guess;
+namespace Zxcvbn\Guess;
 
-use ZxcvbnPhp\Match\DataProvider\AdjacencyGraphs;
+use Zxcvbn\Match\DataProvider\AdjacencyGraphs;
 
 /**
  * Class SpatialEstimator
- * @package ZxcvbnPhp\Guess
+ * @package Zxcvbn\Guess
  */
 class SpatialEstimator extends AbstractEstimator
 {

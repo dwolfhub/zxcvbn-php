@@ -1,9 +1,9 @@
 <?php
-namespace ZxcvbnPhp\Guess;
+namespace Zxcvbn\Guess;
 
 /**
  * Class SequenceEstimator
- * @package ZxcvbnPhp\Guess
+ * @package Zxcvbn\Guess
  */
 class SequenceEstimator extends AbstractEstimator
 {

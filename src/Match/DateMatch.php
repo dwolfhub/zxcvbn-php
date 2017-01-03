@@ -1,8 +1,8 @@
 <?php
 
-namespace ZxcvbnPhp\Match;
+namespace Zxcvbn\Match;
 
-use ZxcvbnPhp\Scoring;
+use Zxcvbn\Scoring;
 
 /**
  *

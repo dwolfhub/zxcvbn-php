@@ -1,6 +1,6 @@
 <?php
 
-namespace ZxcvbnPhp;
+namespace Zxcvbn;
 
 class Zxcvbn
 {
@@ -21,9 +21,9 @@ class Zxcvbn
 
     public function __construct()
     {
-        $this->scorer = new \ZxcvbnPhp\Scorer();
-        $this->searcher = new \ZxcvbnPhp\Searcher();
-        $this->matcher = new \ZxcvbnPhp\Matching();
+        $this->scorer = new \Zxcvbn\Scorer();
+        $this->searcher = new \Zxcvbn\Searcher();
+        $this->matcher = new \Zxcvbn\Matching();
     }
 
     /**

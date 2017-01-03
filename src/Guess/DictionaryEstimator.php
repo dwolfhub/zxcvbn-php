@@ -1,11 +1,11 @@
 <?php
-namespace ZxcvbnPhp\Guess;
+namespace Zxcvbn\Guess;
 
-use ZxcvbnPhp\Scoring;
+use Zxcvbn\Scoring;
 
 /**
  * Class DictionaryEstimator
- * @package ZxcvbnPhp\Guess
+ * @package Zxcvbn\Guess
  */
 class DictionaryEstimator extends AbstractEstimator
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace ZxcvbnPhp\Guess;
+namespace Zxcvbn\Guess;
 
 /**
  * Class Estimator
- * @package ZxcvbnPhp\Guess
+ * @package Zxcvbn\Guess
  */
 abstract class AbstractEstimator
 {

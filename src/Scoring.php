@@ -1,10 +1,10 @@
 <?php
 
-namespace ZxcvbnPhp;
+namespace Zxcvbn;
 
 /**
  * Class Scoring
- * @package ZxcvbnPhp
+ * @package Zxcvbn
  */
 class Scoring
 {
@@ -299,13 +299,13 @@ class Scoring
         }
 
         $estimationFunctions = [
-            'bruteforce' => 'ZxcvbnPhp\Guess\BruteForceEstimator',
-            'dictionary' => 'ZxcvbnPhp\Guess\DictionaryEstimator',
-            'spatial' => 'ZxcvbnPhp\Guess\SpatialEstimator',
-            'repeat' => 'ZxcvbnPhp\Guess\RepeatEstimator',
-            'sequence' => 'ZxcvbnPhp\Guess\SequenceEstimator',
-            'regex' => 'ZxcvbnPhp\Guess\RegexEstimator',
-            'date' => 'ZxcvbnPhp\Guess\DateEstimator',
+            'bruteforce' => 'Zxcvbn\Guess\BruteForceEstimator',
+            'dictionary' => 'Zxcvbn\Guess\DictionaryEstimator',
+            'spatial' => 'Zxcvbn\Guess\SpatialEstimator',
+            'repeat' => 'Zxcvbn\Guess\RepeatEstimator',
+            'sequence' => 'Zxcvbn\Guess\SequenceEstimator',
+            'regex' => 'Zxcvbn\Guess\RegexEstimator',
+            'date' => 'Zxcvbn\Guess\DateEstimator',
         ];
 
         $estimator = new $estimationFunctions[$match['pattern']]($match);

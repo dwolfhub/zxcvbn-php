@@ -1,6 +1,6 @@
 <?php
 
-namespace ZxcvbnPhp\Match;
+namespace Zxcvbn\Match;
 
 class ReverseDictionaryMatch extends AbstractMatch
 {
