@@ -18,10 +18,15 @@ class L33tMatch extends AbstractMatch
      */
     protected $dictionaryMatch;
 
-    public function __construct($password)
-    {
-        parent::__construct($password);
 
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        // todo refactor this
         $this->l33tTable = [
             'a' => ['4', '@'],
             'b' => ['8'],
@@ -37,7 +42,6 @@ class L33tMatch extends AbstractMatch
             'z' => ['2'],
         ];
 
-        $this->dictionaryMatch = new DictionaryMatch($password);
     }
 
     /**
@@ -45,6 +49,9 @@ class L33tMatch extends AbstractMatch
      */
     public function getMatches()
     {
+        // todo refactor this
+        $this->dictionaryMatch = new DictionaryMatch($this->password);
+
         $matches = [];
 
         foreach ($this->enumerateL33tSubs() as $sub) {

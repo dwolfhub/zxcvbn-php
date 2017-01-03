@@ -20,61 +20,36 @@ class Feedback
     ];
 
     /**
-     * @var int
-     */
-    protected $score;
-
-    /**
-     * @var array
-     */
-    protected $sequence;
-
-    /**
-     * Feedback constructor.
-     * @param $score
-     * @param $sequence
-     */
-    public function __construct($score, $sequence)
-    {
-        $this->score = $score;
-        $this->sequence = $sequence;
-    }
-
-    /**
+     * @param int $score
+     * @param array $sequence
      * @return array
      */
-    public function getFeedback()
+    public function getFeedback($score, $sequence)
     {
-        if (count($this->sequence) === 0) {
+        if (count($sequence) === 0) {
             return self::DEFAULT_FEEDBACK;
         }
 
-        if ($this->score > 2) {
+        if ($score > 2) {
             return [
                 'warning' => '',
                 'suggestions' => [],
             ];
         }
 
-        $longestMatch = $this->sequence[0];
-        foreach (array_slice($this->sequence, 1) as $match) {
+        $longestMatch = $sequence[0];
+        foreach (array_slice($sequence, 1) as $match) {
             if (strlen($match['token']) > strlen($longestMatch['token'])) {
                 $longestMatch = $match;
             }
         }
 
-        $feedback = $this->getMatchFeedback($longestMatch, count($this->sequence) === 1);
-        $extraFeedback = 'Add another word or two. Uncommon words are better.';
-        if ($feedback) {
-            array_unshift($feedback['suggestions'], $extraFeedback);
-            if (!empty($feedback['warning'])) {
-                $feedback['warning'] = '';
-            }
-        } else {
-            $feedback = [
-                'warning' => '',
-                'suggestions' => [$extraFeedback],
-            ];
+        $feedback = $this->getMatchFeedback($longestMatch, count($sequence) === 1);
+
+        array_unshift($feedback['suggestions'], 'Add another word or two. Uncommon words are better.');
+
+        if (empty($feedback['warning'])) {
+            $feedback['warning'] = '';
         }
 
         return $feedback;
@@ -141,6 +116,11 @@ class Feedback
                 ]
             ];
         }
+
+        return [
+            'warning' => '',
+            'suggestions' => [],
+        ];
     }
 
     /**

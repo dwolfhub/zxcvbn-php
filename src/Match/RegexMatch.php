@@ -16,10 +16,11 @@ class RegexMatch extends AbstractMatch
     /**
      * {@inheritdoc}
      */
-    public function __construct($password)
+    public function __construct()
     {
-        parent::__construct($password);
+        parent::__construct();
 
+        // todo refactor this
         $this->regexen = [
             'recent_year' => '/19\d\d|200\d|201\d/',
         ];

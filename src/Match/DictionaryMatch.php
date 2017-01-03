@@ -2,8 +2,6 @@
 
 namespace Zxcvbn\Match;
 
-use Zxcvbn\Match\DataProvider\FrequencyLists;
-
 /**
  * Class DictionaryMatch
  * @package Zxcvbn\Match

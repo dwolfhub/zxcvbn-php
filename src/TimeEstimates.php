@@ -9,29 +9,18 @@ namespace Zxcvbn;
 class TimeEstimates
 {
     /**
-     * @var int
-     */
-    protected $guesses;
-
-    /**
-     * TimeEstimates constructor.
-     * @param $guesses
-     */
-    public function __construct($guesses)
-    {
-        $this->guesses = $guesses;
-    }
-
-    /**
+     * @param float $guesses
      * @return array
      */
-    public function estimateAttackTimes()
+    public function estimateAttackTimes($guesses)
     {
+        $guesses = (float) $guesses;
+
         $crackTimesSeconds = [
-            'online_throttling_100_per_hour' => $this->guesses / (100 / 3600),
-            'online_no_throttling_10_per_second' => $this->guesses / 10,
-            'offline_slow_hashing_1e4_per_second' => $this->guesses / 1e4,
-            'offline_fast_hashing_1e10_per_second' => $this->guesses / 1e10,
+            'online_throttling_100_per_hour' => $guesses / (100 / 3600),
+            'online_no_throttling_10_per_second' => $guesses / 10,
+            'offline_slow_hashing_1e4_per_second' => $guesses / 1e4,
+            'offline_fast_hashing_1e10_per_second' => $guesses / 1e10,
         ];
 
         $crackTimesDisplay = [];
@@ -42,28 +31,29 @@ class TimeEstimates
         return [
             'crack_times_seconds' => $crackTimesSeconds,
             'crack_times_display' => $crackTimesDisplay,
-            'score' => $this->guessesToScore(),
+            'score' => $this->guessesToScore($guesses),
         ];
     }
 
     /**
+     * @param float $guesses
      * @return int
      */
-    protected function guessesToScore()
+    protected function guessesToScore($guesses)
     {
         $delta = 5;
 
-        if ($this->guesses < 1e3 + $delta) {
+        if ($guesses < 1e3 + $delta) {
             # risky password: "too guessable"
             return 0;
-        } else if ($this->guesses < 1e6 + $delta) {
+        } else if ($guesses < 1e6 + $delta) {
             # modest protection from throttled online attacks: "very guessable"
             return 1;
-        } else if ($this->guesses < 1e8 + $delta) {
+        } else if ($guesses < 1e8 + $delta) {
             # modest protection from unthrottled online attacks: "somewhat
             # guessable"
             return 2;
-        } else if ($this->guesses < 1e10 + $delta) {
+        } else if ($guesses < 1e10 + $delta) {
             # modest protection from offline attacks: "safely unguessable"
             # assuming a salted, slow hash function like bcrypt, scrypt, PBKDF2,
             # argon, etc
@@ -76,7 +66,7 @@ class TimeEstimates
     }
 
     /**
-     * @param $seconds
+     * @param float $seconds
      * @return string
      */
     protected function displayTime($seconds)

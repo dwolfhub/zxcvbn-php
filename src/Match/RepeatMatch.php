@@ -2,6 +2,8 @@
 
 namespace Zxcvbn\Match;
 
+use Zxcvbn\Scoring;
+
 /**
  * repeats (aaa, abcabcabc) and sequences (abcdef)
  *
@@ -10,8 +12,25 @@ namespace Zxcvbn\Match;
  */
 class RepeatMatch extends AbstractMatch
 {
+    /**
+     * @var Scoring
+     */
+    protected $scoring;
+
+    /**
+     * @var OmniMatch
+     */
+    protected $omniMatch;
+
+    /**
+     * @return array
+     */
     public function getMatches()
     {
+        // todo refactor this
+        $this->scoring = new Scoring($this->password);
+        $this->omniMatch = new OmniMatch($this->password);
+
         $matches = [];
         $greedy = '/(.+)\1+/';
         $lazy = '/(.+?)\1+/';
@@ -35,9 +54,70 @@ class RepeatMatch extends AbstractMatch
                 // aabaab in aabaabaabaab.
                 // run an anchored lazy match on greedy's repeated string
                 // to find the shortest repeated string
-                preg_match()
-                $baseToken = lazy_anchored.search(match.group(0)).group(1)
+                preg_match($lazyAnchored, $match[0], $lazyAnchoredMatch);
+                $baseToken = $lazyAnchoredMatch[1];
+            } else {
+                $match = $lazyMatch;
+                $baseToken = $match[1];
             }
+
+            $i = strpos($this->password, $match[0]);
+            $j = $i + strlen($match[0] - 1);
+
+            // recursively match and score the base string
+            $baseAnalysis = $this->scoring->mostGuessableMatchSequence(
+                $this->omniMatch->getMatches()
+            );
+            $baseMatches = $baseAnalysis['sequence'];
+            $baseGuesses = $baseAnalysis['guesses'];
+            $matches[] = [
+                'pattern' => 'repeat',
+                'i' => $i,
+                'j' => $j,
+                'token' => $match[0],
+                'base_token' => $baseToken,
+                'base_guesses' => $baseGuesses,
+                'base_matches' => $baseMatches,
+                'repeat_count' => strlen($match[0]) / strlen($baseToken),
+            ];
+
+            $lastIndex = $j + 1;
         }
+
+        return $matches;
     }
+
+    /**
+     * @return Scoring
+     */
+    public function getScoring()
+    {
+        return $this->scoring;
+    }
+
+    /**
+     * @param Scoring $scoring
+     */
+    public function setScoring(Scoring $scoring)
+    {
+        $this->scoring = $scoring;
+    }
+
+    /**
+     * @return OmniMatch
+     */
+    public function getOmniMatch()
+    {
+        return $this->omniMatch;
+    }
+
+    /**
+     * @param OmniMatch $omniMatch
+     */
+    public function setOmniMatch(OmniMatch $omniMatch)
+    {
+        $this->omniMatch = $omniMatch;
+    }
+
+
 }
