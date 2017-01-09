@@ -12,7 +12,7 @@ class RegexEstimator extends AbstractEstimator
     /**
      * {@inheritdoc}
      */
-    public function estimate()
+    public function estimate($match)
     {
         $charClassBases = [
             'alpha_lower' => 26,
@@ -23,13 +23,13 @@ class RegexEstimator extends AbstractEstimator
             'symbols' => 33,
         ];
 
-        if (array_key_exists($this->match['regex_name'], $charClassBases)) {
-            return $charClassBases[$this->match['regex_name']] ** strlen($this->match['token']);
-        } else if ($this->match['regex_name'] === 'recent_year') {
+        if (array_key_exists($match['regex_name'], $charClassBases)) {
+            return $charClassBases[$match['regex_name']] ** strlen($match['token']);
+        } else if ($match['regex_name'] === 'recent_year') {
             // conservative estimate of year space: num years from REFERENCE_YEAR.
             // if year is close to REFERENCE_YEAR, estimate a year space of
             // MIN_YEAR_SPACE.
-            $yearSpace = abs((int)$this->match['regex_match'][0] - Scoring::REFERENCE_YEAR);
+            $yearSpace = abs((int)$match['regex_match'][0] - Scoring::REFERENCE_YEAR);
             $yearSpace = max($yearSpace, Scoring::MIN_YEAR_SPACE);
 
             return $yearSpace;

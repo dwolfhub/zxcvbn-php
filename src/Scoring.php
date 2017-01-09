@@ -2,7 +2,9 @@
 
 namespace Zxcvbn;
 
+use InvalidArgumentException;
 use Zxcvbn\Guess\AbstractEstimator;
+use Zxcvbn\Guess\EstimatorFactory;
 
 /**
  * Class Scoring
@@ -285,19 +287,22 @@ class Scoring
             }
         }
 
+        $estimatorFactory = new EstimatorFactory();
         $estimationFunctions = [
-            'bruteforce' => 'Zxcvbn\Guess\BruteForceEstimator',
-            'dictionary' => 'Zxcvbn\Guess\DictionaryEstimator',
-            'spatial' => 'Zxcvbn\Guess\SpatialEstimator',
-            'repeat' => 'Zxcvbn\Guess\RepeatEstimator',
-            'sequence' => 'Zxcvbn\Guess\SequenceEstimator',
-            'regex' => 'Zxcvbn\Guess\RegexEstimator',
-            'date' => 'Zxcvbn\Guess\DateEstimator',
+            'bruteforce' => $estimatorFactory->create(EstimatorFactory::TYPE_BRUTE_FORCE),
+            'dictionary' => $estimatorFactory->create(EstimatorFactory::TYPE_DICTIONARY),
+            'spatial' => $estimatorFactory->create(EstimatorFactory::TYPE_SPATIAL),
+            'repeat' => $estimatorFactory->create(EstimatorFactory::TYPE_REPEAT),
+            'sequence' => $estimatorFactory->create(EstimatorFactory::TYPE_SEQUENCE),
+            'regex' => $estimatorFactory->create(EstimatorFactory::TYPE_REGEX),
+            'date' => $estimatorFactory->create(EstimatorFactory::TYPE_DATE),
         ];
 
-        /** @var AbstractEstimator $estimator */
-        $estimator = new $estimationFunctions[$match['pattern']]($match);
-        $guesses = $estimator->estimate();
+        if (empty($estimationFunctions[$match['pattern']])) {
+            throw new InvalidArgumentException(sprintf('Match pattern %s in invalid.', $match['pattern']));
+        }
+
+        $guesses = $estimationFunctions[$match['pattern']]->estimate($match);
 
         $match['guesses'] = max($guesses, $minGuesses);
         $match['guesses_log10'] = log($match['guesses'], 10);

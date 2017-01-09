@@ -10,7 +10,6 @@ class OmniMatch extends AbstractMatch
     public function getMatches()
     {
         // initialize matchers
-        // todo refactor to remove coupling?
         $matches = [];
 
         $matches[] = new DateMatch();
