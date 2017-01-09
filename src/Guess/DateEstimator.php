@@ -12,9 +12,9 @@ class DateEstimator extends AbstractEstimator
     /**
      * {@inheritdoc}
      */
-    public function estimate()
+    public function estimate($match)
     {
-        $yearSpace = max(abs($this->match['year'] - Scoring::REFERENCE_YEAR), Scoring::MIN_YEAR_SPACE);
+        $yearSpace = max(abs($match['year'] - Scoring::REFERENCE_YEAR), Scoring::MIN_YEAR_SPACE);
         $guesses = $yearSpace * 365;
         if (!empty($match['separator'])) {
             $guesses *= 4;

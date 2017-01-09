@@ -8,20 +8,6 @@ namespace Zxcvbn\Guess;
 abstract class AbstractEstimator implements EstimatorInterface
 {
     /**
-     * @var array
-     */
-    protected $match;
-
-    /**
-     * Estimator constructor.
-     * @param $match
-     */
-    public function __construct($match)
-    {
-        $this->match = $match;
-    }
-
-    /**
      * @param $n
      * @param $k
      * @return int
@@ -49,5 +35,5 @@ abstract class AbstractEstimator implements EstimatorInterface
     /**
      * @return int
      */
-    abstract public function estimate();
+    abstract public function estimate($match);
 }

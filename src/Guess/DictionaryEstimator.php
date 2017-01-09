@@ -12,26 +12,26 @@ class DictionaryEstimator extends AbstractEstimator
     /**
      * {@inheritdoc}
      */
-    public function estimate()
+    public function estimate($match)
     {
-        $this->match['base_guesses'] = $this->match['rank'];
-        $this->match['uppercase_variations'] = $this->uppercaseVariations();
-        $this->match['l33t_variations'] = $this->l33tVariations();
+        $match['base_guesses'] = $match['rank'];
+        $match['uppercase_variations'] = $this->uppercaseVariations($match);
+        $match['l33t_variations'] = $this->l33tVariations($match);
 
         $reversedVariations = !empty($match['reversed']) ? 2 : 1;
 
-        return $this->match['base_guesses']
-            * $this->match['uppercase_variations']
-            * $this->match['l33t_variations']
+        return $match['base_guesses']
+            * $match['uppercase_variations']
+            * $match['l33t_variations']
             * $reversedVariations;
     }
 
     /**
      * @return int
      */
-    protected function uppercaseVariations()
+    protected function uppercaseVariations($match)
     {
-        $word = $this->match['token'];
+        $word = $match['token'];
 
         if (preg_match(Scoring::ALL_LOWER, $word) or strtolower($word) == $word) {
             return 1;
@@ -57,7 +57,7 @@ class DictionaryEstimator extends AbstractEstimator
     /**
      *
      */
-    protected function l33tVariations()
+    protected function l33tVariations($match)
     {
         if (empty($match['l33t'])) {
             return 1;

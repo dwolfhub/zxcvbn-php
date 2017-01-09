@@ -11,9 +11,9 @@ class SequenceEstimator extends AbstractEstimator
     /**
      * {@inheritdoc}
      */
-    public function estimate()
+    public function estimate($match)
     {
-        $firstChr = substr($this->match['token'], 0, 1);
+        $firstChr = substr($match['token'], 0, 1);
         // lower guesses for obvious starting points
         if (in_array($firstChr, ['a', 'A', 'z', 'Z', '0', '1', '9'])) {
             $baseGuesses = 4;
@@ -28,10 +28,10 @@ class SequenceEstimator extends AbstractEstimator
             }
         }
 
-        if (!$this->match['ascending']) {
+        if (!$match['ascending']) {
             $baseGuesses *= 2;
         }
 
-        return $baseGuesses * strlen($this->match['token']);
+        return $baseGuesses * strlen($match['token']);
     }
 }

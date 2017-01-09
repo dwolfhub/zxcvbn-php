@@ -13,11 +13,11 @@ class SpatialEstimator extends AbstractEstimator
     /**
      * {@inheritdoc}
      */
-    public function estimate()
+    public function estimate($match)
     {
         $adjacencyGraphs = AdjacencyGraphs::getData();
 
-        if (in_array($this->match['graph'], ['qwerty', 'dvorak'])) {
+        if (in_array($match['graph'], ['qwerty', 'dvorak'])) {
             $s = count($adjacencyGraphs['qwerty']);
             $d = $this->calcAverageDegree($adjacencyGraphs['qwerty']);
         } else {
@@ -26,8 +26,8 @@ class SpatialEstimator extends AbstractEstimator
         }
 
         $guesses = 0;
-        $L = strlen($this->match['token']);
-        $t = $this->match['turns'];
+        $L = strlen($match['token']);
+        $t = $match['turns'];
 
         // estimate the number of possible patterns w/ length L or less with t turns
         // or less.
@@ -40,9 +40,9 @@ class SpatialEstimator extends AbstractEstimator
         // add extra guesses for shifted keys. (% instead of 5, A instead of a.)
         // math is similar to extra guesses of l33t substitutions in dictionary
         // matches.
-        if ($this->match['shifted_count']) {
-            $S = $this->match['shifted_count'];
-            $U = strlen($this->match['token']) - $this->match['shifted_count']; // unshifted count
+        if ($match['shifted_count']) {
+            $S = $match['shifted_count'];
+            $U = strlen($match['token']) - $match['shifted_count']; // unshifted count
             if ($S === 0 or $U ===0) {
                 $guesses *= 2;
             } else {

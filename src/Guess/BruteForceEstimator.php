@@ -17,9 +17,9 @@ class BruteForceEstimator extends AbstractEstimator
     /**
      * {@inheritdoc}
      */
-    public function estimate()
+    public function estimate($match)
     {
-        $tokenLen = strlen($this->match['token']);
+        $tokenLen = strlen($match['token']);
         $guesses = self::BRUTEFORCE_CARDINALITY ** $tokenLen;
         // small detail: make bruteforce matches at minimum one guess bigger than
         // smallest allowed submatch guesses, such that non-bruteforce submatches

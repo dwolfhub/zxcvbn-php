@@ -10,8 +10,8 @@ class RepeatEstimator extends AbstractEstimator
     /**
      * {@inheritdoc}
      */
-    public function estimate()
+    public function estimate($match)
     {
-        return $this->match['base_guesses'] * $this->match['repeat_count'];
+        return $match['base_guesses'] * $match['repeat_count'];
     }
 }
