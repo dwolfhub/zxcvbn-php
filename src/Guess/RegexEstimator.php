@@ -3,6 +3,10 @@ namespace Zxcvbn\Guess;
 
 use Zxcvbn\Scoring;
 
+// x = 340,000 + x * .15
+// -340,000 = -.85x
+// 340,000 = .85x
+
 /**
  * Class RegexEstimator
  * @package Zxcvbn\Guess

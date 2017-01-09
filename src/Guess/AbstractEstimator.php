@@ -1,12 +1,11 @@
 <?php
-
 namespace Zxcvbn\Guess;
 
 /**
  * Class Estimator
  * @package Zxcvbn\Guess
  */
-abstract class AbstractEstimator
+abstract class AbstractEstimator implements EstimatorInterface
 {
     /**
      * @var array

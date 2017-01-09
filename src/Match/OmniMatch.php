@@ -2,47 +2,38 @@
 
 namespace Zxcvbn\Match;
 
-use Zxcvbn\Match\DataProvider\AdjacencyGraphs;
-use Zxcvbn\Scoring;
+use Match\MatchFactory;
 
+/**
+ * Class OmniMatch
+ * @package Zxcvbn\Match
+ */
 class OmniMatch extends AbstractMatch
 {
+    /**
+     * {@inheritdoc}
+     */
     public function getMatches()
     {
-        // initialize matchers
-        // todo refactor to remove coupling?
-        $matches = [];
+        $matchFactory = new MatchFactory();
 
-        $matches[] = new DateMatch();
-        $dictionaryMatch = new DictionaryMatch();
-        $matches[] = $dictionaryMatch;
-        $matches[] = new RegexMatch();
-
-        $l33tMatch = new L33tMatch();
-        $l33tMatch->setL33tTable(L33tMatch::DEFAULT_L33T_TABLE);
-        $l33tMatch->setDictionaryMatch($dictionaryMatch);
-        $matches[] = $l33tMatch;
-
-        $repeatMatch = new RepeatMatch();
-        $repeatMatch->setScoring(new Scoring($this->password));
-        $repeatMatch->setOmniMatch($this);
-        $matches[] = $repeatMatch;
-
-        $reverseDictionaryMatch = new ReverseDictionaryMatch();
-        $reverseDictionaryMatch->setDictionaryMatch($dictionaryMatch);
-        $matches[] = $reverseDictionaryMatch;
-
-        $matches[] = new SequenceMatch();
-        $spatialMatch = new SpatialMatch();
-        $spatialMatch->setGraphs(AdjacencyGraphs::getData());
-        $matches[] = $spatialMatch;
+        $matches = [
+            $matchFactory->create(MatchFactory::TYPE_DATE, $this->password),
+            $matchFactory->create(MatchFactory::TYPE_DICTIONARY, $this->password),
+            $matchFactory->create(MatchFactory::TYPE_L33T, $this->password),
+            $matchFactory->create(MatchFactory::TYPE_OMNI, $this->password),
+            $matchFactory->create(MatchFactory::TYPE_REGEX, $this->password),
+            $matchFactory->create(MatchFactory::TYPE_REPEAT, $this->password),
+            $matchFactory->create(MatchFactory::TYPE_REVERSE_DICTIONARY, $this->password),
+            $matchFactory->create(MatchFactory::TYPE_SEQUENCE, $this->password),
+            $matchFactory->create(MatchFactory::TYPE_SPATIAL, $this->password),
+        ];
 
         $results = [];
-
-        /** @var AbstractMatch $match */
         foreach ($matches as $match) {
             $results = $match->getMatches() + $results;
         }
+
         usort($results, [$this, 'sortByIAndJ']);
 
         return $results;

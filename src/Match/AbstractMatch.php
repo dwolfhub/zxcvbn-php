@@ -2,13 +2,11 @@
 
 namespace Zxcvbn\Match;
 
-use Zxcvbn\Match\DataProvider\FrequencyLists;
-
 /**
  * Class AbstractMatch
  * @package Match
  */
-abstract class AbstractMatch
+abstract class AbstractMatch implements MatchInterface
 {
     /**
      * @var string
@@ -101,7 +99,7 @@ abstract class AbstractMatch
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     abstract public function getMatches();
 }

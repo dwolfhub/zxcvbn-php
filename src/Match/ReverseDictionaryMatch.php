@@ -9,7 +9,7 @@ namespace Zxcvbn\Match;
 class ReverseDictionaryMatch extends AbstractMatch
 {
     /**
-     * @var DictionaryMatch
+     * @var AbstractMatch
      */
     protected $dictionaryMatch;
 
@@ -35,17 +35,17 @@ class ReverseDictionaryMatch extends AbstractMatch
     }
 
     /**
-     * @return DictionaryMatch
+     * @return AbstractMatch
      */
-    public function getDictionaryMatch(): DictionaryMatch
+    public function getDictionaryMatch()
     {
         return $this->dictionaryMatch;
     }
 
     /**
-     * @param DictionaryMatch $dictionaryMatch
+     * @param AbstractMatch $dictionaryMatch
      */
-    public function setDictionaryMatch(DictionaryMatch $dictionaryMatch)
+    public function setDictionaryMatch(AbstractMatch $dictionaryMatch)
     {
         $this->dictionaryMatch = $dictionaryMatch;
     }

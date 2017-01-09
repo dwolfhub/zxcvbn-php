@@ -2,6 +2,7 @@
 
 namespace Zxcvbn;
 
+use Match\MatchFactory;
 use Zxcvbn\Match\AbstractMatch;
 use Zxcvbn\Match\DataProvider\FrequencyLists;
 use Zxcvbn\Match\OmniMatch;
@@ -58,17 +59,20 @@ class Zxcvbn
      */
     public static function passwordStrength($password, array $userInputs = [])
     {
-        $omniMatch= new OmniMatch();
-        $omniMatch->setRankedDictionaries(FrequencyLists::getData());
+        $matchFactory = new MatchFactory();
+        $omniMatch = $matchFactory->create(
+            MatchFactory::TYPE_OMNI,
+            $password
+        );
 
-        $cls = new static(
+        $zxcvbn = new static(
             $omniMatch,
             new Scoring(),
             new TimeEstimates(),
             new Feedback()
         );
 
-        return $cls->calculateStrength($password, $userInputs);
+        return $zxcvbn->calculateStrength($password, $userInputs);
     }
 
     /**

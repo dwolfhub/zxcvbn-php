@@ -18,7 +18,7 @@ class RepeatMatch extends AbstractMatch
     protected $scoring;
 
     /**
-     * @var OmniMatch
+     * @var AbstractMatch
      */
     protected $omniMatch;
 
@@ -101,7 +101,7 @@ class RepeatMatch extends AbstractMatch
     }
 
     /**
-     * @return OmniMatch
+     * @return AbstractMatch
      */
     public function getOmniMatch()
     {
@@ -109,7 +109,7 @@ class RepeatMatch extends AbstractMatch
     }
 
     /**
-     * @param OmniMatch $omniMatch
+     * @param AbstractMatch $omniMatch
      */
     public function setOmniMatch(OmniMatch $omniMatch)
     {
