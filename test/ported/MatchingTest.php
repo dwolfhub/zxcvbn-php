@@ -27,7 +27,7 @@ class MatchingTest extends \PHPUnit_Framework_TestCase
             $map = $stringMapResult[1];
             $result = $stringMapResult[2];
 
-            $this->assertEquals()
+//            $this->assertEquals()
         }
     }
 

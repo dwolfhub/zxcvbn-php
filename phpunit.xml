@@ -6,15 +6,15 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false"
-         syntaxCheck="false"
-         bootstrap="vendor/autoload.php">
+         syntaxCheck="true"
+         bootstrap="./vendor/autoload.php">
 
     <testsuites>
         <testsuite name="zxcvbn-ported">
-            <directory>test/ported</directory>
+            <directory>./test/ported</directory>
         </testsuite>
         <testsuite name="zxcvbn-unit">
-            <directory>test/unit</directory>
+            <directory>./test/unit</directory>
         </testsuite>
     </testsuites>
 
