@@ -10,5 +10,5 @@ interface EstimatorInterface
     /**
      * @return int
      */
-    public function estimate();
+    public function estimate($match);
 }

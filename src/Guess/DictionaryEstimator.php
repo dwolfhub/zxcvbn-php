@@ -27,6 +27,7 @@ class DictionaryEstimator extends AbstractEstimator
     }
 
     /**
+     * @param array $match
      * @return int
      */
     protected function uppercaseVariations($match)
@@ -55,7 +56,8 @@ class DictionaryEstimator extends AbstractEstimator
     }
 
     /**
-     *
+     * @var array $match
+     * @return int
      */
     protected function l33tVariations($match)
     {
@@ -93,6 +95,7 @@ class DictionaryEstimator extends AbstractEstimator
                 // this case is similar to capitalization:
                 // with aa44a, U = 3, S = 2, attacker needs to try unsubbed + one
                 // sub + two subs
+                $p = min($u, $s);
                 $possibilities = 0;
                 for ($i = 1; $i <= $p; $i++) {
                     $possibilities += $this->nCK($u + $s, $i);

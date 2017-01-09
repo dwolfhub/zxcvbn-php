@@ -55,7 +55,7 @@ class Scoring
     /**
      * @var int
      */
-    const REFERENCE_YEAR = 2016;
+    const REFERENCE_YEAR = 2017;
 
     /**
      * @param string $password

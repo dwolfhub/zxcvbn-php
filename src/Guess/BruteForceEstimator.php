@@ -30,6 +30,6 @@ class BruteForceEstimator extends AbstractEstimator
             $minGuesses = Scoring::MIN_SUBMATCH_GUESSES_MULTI_CHAR;
         }
 
-        return min($guesses, $minGuesses);
+        return max($guesses, $minGuesses);
     }
 }
