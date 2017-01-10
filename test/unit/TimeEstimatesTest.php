@@ -31,7 +31,10 @@ class TimeEstimatesTest extends PHPUnit_Framework_TestCase
     {
         $times = $this->timeEstimates->estimateAttackTimes(2567800);
 
-        $this->assertEquals('less than a second', $times['crack_times_display']['offline_fast_hashing_1e10_per_second']);
+        $this->assertEquals(
+            'less than a second',
+            $times['crack_times_display']['offline_fast_hashing_1e10_per_second']
+        );
         $this->assertEquals('4 minutes', $times['crack_times_display']['offline_slow_hashing_1e4_per_second']);
         $this->assertEquals('3 days', $times['crack_times_display']['online_no_throttling_10_per_second']);
         $this->assertEquals('3 years', $times['crack_times_display']['online_throttling_100_per_hour']);

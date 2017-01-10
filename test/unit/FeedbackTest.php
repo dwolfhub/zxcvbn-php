@@ -106,7 +106,8 @@ class FeedbackTest extends PHPUnit_Framework_TestCase
                 'guesses_log10' => 4,
                 'pattern' => 'dictionary',
                 'token' => 'rosemary',
-            ], [
+            ],
+            [
                 'dictionary_name' => 'english',
                 'reversed' => false,
                 'l33t' => false,
@@ -168,7 +169,10 @@ class FeedbackTest extends PHPUnit_Framework_TestCase
                 'token' => 'ROSEMARY',
             ]
         ]);
-        $this->assertContains("Predictable substitutions like '@' instead of 'a' don't help very much", $feedback['suggestions']);
+        $this->assertContains(
+            "Predictable substitutions like '@' instead of 'a' don't help very much",
+            $feedback['suggestions']
+        );
 
     }
 
@@ -208,7 +212,10 @@ class FeedbackTest extends PHPUnit_Framework_TestCase
                 'base_token' => 'abc',
             ]
         ]);
-        $this->assertEquals('Repeats like "abcabcabc" are only slightly harder to guess than "abc"', $feedback['warning']);
+        $this->assertEquals(
+            'Repeats like "abcabcabc" are only slightly harder to guess than "abc"',
+            $feedback['warning']
+        );
         $this->assertContains('Avoid repeated words and characters', $feedback['suggestions']);
     }
 
@@ -236,7 +243,7 @@ class FeedbackTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('Recent years are easy to guess', $feedback['warning']);
         $this->assertContains('Avoid recent years', $feedback['suggestions']);
-        $this->assertContains( 'Avoid years that are associated with you', $feedback['suggestions']);
+        $this->assertContains('Avoid years that are associated with you', $feedback['suggestions']);
     }
 
     public function testDateMatchFeedback()
