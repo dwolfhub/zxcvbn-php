@@ -15,6 +15,7 @@ class SpatialEstimator extends AbstractEstimator
      */
     public function estimate($match)
     {
+        // @todo decouple?
         $adjacencyGraphs = AdjacencyGraphs::getData();
 
         if (in_array($match['graph'], ['qwerty', 'dvorak'])) {
