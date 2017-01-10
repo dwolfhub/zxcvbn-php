@@ -2,6 +2,8 @@
 
 namespace Zxcvbn;
 
+use Zxcvbn\Guess\DictionaryEstimator;
+
 /**
  * Class Feedback
  * @package Zxcvbn
@@ -161,9 +163,9 @@ class Feedback
 
         $suggestions = [];
         $word = $match['token'];
-        if (preg_match(Scoring::START_UPPER, $word)) {
+        if (preg_match(DictionaryEstimator::START_UPPER, $word)) {
             array_push($suggestions, "Capitalization doesn't help very much");
-        } else if (preg_match(Scoring::ALL_UPPER, $word) and strtolower($word) != $word) {
+        } else if (preg_match(DictionaryEstimator::ALL_UPPER, $word) and strtolower($word) != $word) {
             array_push($suggestions, 'All-uppercase is almost as easy to guess as all-lowercase');
         }
 

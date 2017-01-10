@@ -3,6 +3,7 @@
 namespace Zxcvbn;
 
 use Match\MatchFactory;
+use Zxcvbn\Guess\EstimatorFactory;
 use Zxcvbn\Match\AbstractMatch;
 use Zxcvbn\Match\DataProvider\FrequencyLists;
 use Zxcvbn\Match\OmniMatch;
@@ -67,7 +68,7 @@ class Zxcvbn
 
         $zxcvbn = new static(
             $omniMatch,
-            new Scoring(),
+            new Scoring(new EstimatorFactory()),
             new TimeEstimates(),
             new Feedback()
         );
@@ -93,7 +94,6 @@ class Zxcvbn
         $this->omniMatch->addRankedDictionary('user_inputs', $sanitizedInputs);
 
         $matches = $this->omniMatch->getMatches();
-
         $result = $this->scoring->mostGuessableMatchSequence($password, $matches, empty($matches) === false);
 
         $result['calc_time'] = microtime(true) - $start;

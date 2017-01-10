@@ -10,6 +10,26 @@ use Zxcvbn\Scoring;
 class DictionaryEstimator extends AbstractEstimator
 {
     /**
+     * @var string regular expression
+     */
+    const ALL_LOWER = '/^[^A-Z]+$/';
+
+    /**
+     * @var string regular expression
+     */
+    const ALL_UPPER = '/^[^a-z]+$/';
+
+    /**
+     * @var string regular expression
+     */
+    const END_UPPER = '/^[^A-Z]+[A-Z]$/';
+
+    /**
+     * @var string regular expression
+     */
+    const START_UPPER = '/^[A-Z][^A-Z]+$/';
+
+    /**
      * {@inheritdoc}
      */
     public function estimate($match)
@@ -34,11 +54,11 @@ class DictionaryEstimator extends AbstractEstimator
     {
         $word = $match['token'];
 
-        if (preg_match(Scoring::ALL_LOWER, $word) or strtolower($word) == $word) {
+        if (preg_match(self::ALL_LOWER, $word) or strtolower($word) == $word) {
             return 1;
         }
 
-        foreach ([Scoring::START_UPPER, Scoring::END_UPPER, Scoring::ALL_UPPER] as $regex) {
+        foreach ([self::START_UPPER, self::END_UPPER, self::ALL_UPPER] as $regex) {
             if (preg_match($regex, $word)) {
                 return 2;
             }

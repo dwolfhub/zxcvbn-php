@@ -30,7 +30,7 @@ class RegexEstimator extends AbstractEstimator
             // if year is close to REFERENCE_YEAR, estimate a year space of
             // MIN_YEAR_SPACE.
             $yearSpace = abs((int)$match['regex_match'][0] - Scoring::REFERENCE_YEAR);
-            $yearSpace = max($yearSpace, Scoring::MIN_YEAR_SPACE);
+            $yearSpace = max($yearSpace, AbstractEstimator::MIN_YEAR_SPACE);
 
             return $yearSpace;
         }

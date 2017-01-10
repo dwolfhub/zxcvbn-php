@@ -8,6 +8,11 @@ namespace Zxcvbn\Guess;
 abstract class AbstractEstimator implements EstimatorInterface
 {
     /**
+     * @var int
+     */
+    const MIN_YEAR_SPACE = 20;
+
+    /**
      * @param $n
      * @param $k
      * @return int

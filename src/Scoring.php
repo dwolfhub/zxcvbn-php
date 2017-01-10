@@ -3,7 +3,6 @@
 namespace Zxcvbn;
 
 use InvalidArgumentException;
-use Zxcvbn\Guess\AbstractEstimator;
 use Zxcvbn\Guess\EstimatorFactory;
 
 /**
@@ -12,26 +11,6 @@ use Zxcvbn\Guess\EstimatorFactory;
  */
 class Scoring
 {
-    /**
-     * @var string regular expression
-     */
-    const START_UPPER = '/^[A-Z][^A-Z]+$/';
-
-    /**
-     * @var string regular expression
-     */
-    const END_UPPER = '/^[^A-Z]+[A-Z]$/';
-
-    /**
-     * @var string regular expression
-     */
-    const ALL_UPPER = '/^[^a-z]+$/';
-
-    /**
-     * @var string regular expression
-     */
-    const ALL_LOWER = '/^[^A-Z]+$/';
-
     /**
      * @var int
      */
@@ -50,12 +29,21 @@ class Scoring
     /**
      * @var int
      */
-    const MIN_YEAR_SPACE = 20;
+    const REFERENCE_YEAR = 2017;
 
     /**
-     * @var int
+     * @var EstimatorFactory
      */
-    const REFERENCE_YEAR = 2017;
+    protected $estimatorFactory;
+
+    /**
+     * Scoring constructor.
+     * @param EstimatorFactory $estimatorFactory
+     */
+    public function __construct(EstimatorFactory $estimatorFactory)
+    {
+        $this->estimatorFactory = $estimatorFactory;
+    }
 
     /**
      * @param string $password
@@ -81,8 +69,6 @@ class Scoring
             // same structure as optimal.m -- holds the overall metric.
             'g' => array_fill(0, $n, []),
         ];
-
-        $n = strlen($password);
 
         $matchesByJ = array_fill(0, $n, []);
         foreach ($matches as $m) {
@@ -156,7 +142,7 @@ class Scoring
             $pi *= $optimal['pi'][$m['i'] - 1][$l - 1];
         }
         // calculate the minimization func
-        $g = gmp_fact($l) * $pi;
+        $g = $this->factorial($l) * $pi;
         if (!$excludeAdditive) {
             $g += self::MIN_GUESSES_BEFORE_GROWING_SEQUENCE ** ($l - 1);
         }
@@ -287,19 +273,18 @@ class Scoring
             }
         }
 
-        $estimatorFactory = new EstimatorFactory();
         $estimationFunctions = [
-            'bruteforce' => $estimatorFactory->create(EstimatorFactory::TYPE_BRUTE_FORCE),
-            'dictionary' => $estimatorFactory->create(EstimatorFactory::TYPE_DICTIONARY),
-            'spatial' => $estimatorFactory->create(EstimatorFactory::TYPE_SPATIAL),
-            'repeat' => $estimatorFactory->create(EstimatorFactory::TYPE_REPEAT),
-            'sequence' => $estimatorFactory->create(EstimatorFactory::TYPE_SEQUENCE),
-            'regex' => $estimatorFactory->create(EstimatorFactory::TYPE_REGEX),
-            'date' => $estimatorFactory->create(EstimatorFactory::TYPE_DATE),
+            'bruteforce' => $this->estimatorFactory->create(EstimatorFactory::TYPE_BRUTE_FORCE),
+            'dictionary' => $this->estimatorFactory->create(EstimatorFactory::TYPE_DICTIONARY),
+            'spatial' => $this->estimatorFactory->create(EstimatorFactory::TYPE_SPATIAL),
+            'repeat' => $this->estimatorFactory->create(EstimatorFactory::TYPE_REPEAT),
+            'sequence' => $this->estimatorFactory->create(EstimatorFactory::TYPE_SEQUENCE),
+            'regex' => $this->estimatorFactory->create(EstimatorFactory::TYPE_REGEX),
+            'date' => $this->estimatorFactory->create(EstimatorFactory::TYPE_DATE),
         ];
 
         if (empty($estimationFunctions[$match['pattern']])) {
-            throw new InvalidArgumentException(sprintf('Match pattern %s in invalid.', $match['pattern']));
+            throw new InvalidArgumentException(sprintf('Match pattern %s is invalid.', $match['pattern']));
         }
 
         $guesses = $estimationFunctions[$match['pattern']]->estimate($match);
@@ -308,5 +293,18 @@ class Scoring
         $match['guesses_log10'] = log($match['guesses'], 10);
 
         return $match['guesses'];
+    }
+
+    /**
+     * @param $number
+     * @return int
+     */
+    protected function factorial($number)
+    {
+        if ($number < 2) {
+            return 1;
+        } else {
+            return ($number * factorial($number - 1));
+        }
     }
 }
