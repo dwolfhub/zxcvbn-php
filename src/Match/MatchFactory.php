@@ -8,7 +8,6 @@ use Zxcvbn\Match\DataProvider\AdjacencyGraphs;
 use Zxcvbn\Match\DateMatch;
 use Zxcvbn\Match\DictionaryMatch;
 use Zxcvbn\Match\L33tMatch;
-use Zxcvbn\Match\MatchInterface;
 use Zxcvbn\Match\OmniMatch;
 use Zxcvbn\Match\RegexMatch;
 use Zxcvbn\Match\RepeatMatch;
@@ -77,10 +76,10 @@ class MatchFactory
     public function create($type, $password)
     {
         if ($type === self::TYPE_DATE) {
-            $match =  new DateMatch();
+            $match = new DateMatch();
 
         } else if ($type === self::TYPE_DICTIONARY) {
-            $match =  new DictionaryMatch();
+            $match = new DictionaryMatch();
 
         } else if ($type === self::TYPE_L33T) {
             $match = new L33tMatch();

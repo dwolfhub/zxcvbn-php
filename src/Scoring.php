@@ -167,6 +167,61 @@ class Scoring
     }
 
     /**
+     * @param string $password
+     * @param array $match
+     * @return mixed
+     */
+    protected function estimateGuesses($password, &$match)
+    {
+        if (!empty($match['guesses'])) {
+            return $match['guesses'];
+        }
+
+        $minGuesses = 1;
+        if (strlen($match['token']) < strlen($password)) {
+            if (strlen($match['token']) === 1) {
+                $minGuesses = self::MIN_SUBMATCH_GUESSES_SINGLE_CHAR;
+            } else {
+                $minGuesses = self::MIN_SUBMATCH_GUESSES_MULTI_CHAR;
+            }
+        }
+
+        $estimationFunctions = [
+            'bruteforce' => $this->estimatorFactory->create(EstimatorFactory::TYPE_BRUTE_FORCE),
+            'dictionary' => $this->estimatorFactory->create(EstimatorFactory::TYPE_DICTIONARY),
+            'spatial' => $this->estimatorFactory->create(EstimatorFactory::TYPE_SPATIAL),
+            'repeat' => $this->estimatorFactory->create(EstimatorFactory::TYPE_REPEAT),
+            'sequence' => $this->estimatorFactory->create(EstimatorFactory::TYPE_SEQUENCE),
+            'regex' => $this->estimatorFactory->create(EstimatorFactory::TYPE_REGEX),
+            'date' => $this->estimatorFactory->create(EstimatorFactory::TYPE_DATE),
+        ];
+
+        if (empty($estimationFunctions[$match['pattern']])) {
+            throw new InvalidArgumentException(sprintf('Match pattern %s is invalid.', $match['pattern']));
+        }
+
+        $guesses = $estimationFunctions[$match['pattern']]->estimate($match);
+
+        $match['guesses'] = max($guesses, $minGuesses);
+        $match['guesses_log10'] = log($match['guesses'], 10);
+
+        return $match['guesses'];
+    }
+
+    /**
+     * @param $number
+     * @return int
+     */
+    protected function factorial($number)
+    {
+        if ($number < 2) {
+            return 1;
+        } else {
+            return ($number * factorial($number - 1));
+        }
+    }
+
+    /**
      * helper: evaluate bruteforce matches ending at k.
      *
      * @param string $password
@@ -251,60 +306,5 @@ class Scoring
         }
 
         return $optimalMatchSequence;
-    }
-
-    /**
-     * @param string $password
-     * @param array $match
-     * @return mixed
-     */
-    protected function estimateGuesses($password, &$match)
-    {
-        if (!empty($match['guesses'])) {
-            return $match['guesses'];
-        }
-
-        $minGuesses = 1;
-        if (strlen($match['token']) < strlen($password)) {
-            if (strlen($match['token']) === 1) {
-                $minGuesses = self::MIN_SUBMATCH_GUESSES_SINGLE_CHAR;
-            } else {
-                $minGuesses = self::MIN_SUBMATCH_GUESSES_MULTI_CHAR;
-            }
-        }
-
-        $estimationFunctions = [
-            'bruteforce' => $this->estimatorFactory->create(EstimatorFactory::TYPE_BRUTE_FORCE),
-            'dictionary' => $this->estimatorFactory->create(EstimatorFactory::TYPE_DICTIONARY),
-            'spatial' => $this->estimatorFactory->create(EstimatorFactory::TYPE_SPATIAL),
-            'repeat' => $this->estimatorFactory->create(EstimatorFactory::TYPE_REPEAT),
-            'sequence' => $this->estimatorFactory->create(EstimatorFactory::TYPE_SEQUENCE),
-            'regex' => $this->estimatorFactory->create(EstimatorFactory::TYPE_REGEX),
-            'date' => $this->estimatorFactory->create(EstimatorFactory::TYPE_DATE),
-        ];
-
-        if (empty($estimationFunctions[$match['pattern']])) {
-            throw new InvalidArgumentException(sprintf('Match pattern %s is invalid.', $match['pattern']));
-        }
-
-        $guesses = $estimationFunctions[$match['pattern']]->estimate($match);
-
-        $match['guesses'] = max($guesses, $minGuesses);
-        $match['guesses_log10'] = log($match['guesses'], 10);
-
-        return $match['guesses'];
-    }
-
-    /**
-     * @param $number
-     * @return int
-     */
-    protected function factorial($number)
-    {
-        if ($number < 2) {
-            return 1;
-        } else {
-            return ($number * factorial($number - 1));
-        }
     }
 }

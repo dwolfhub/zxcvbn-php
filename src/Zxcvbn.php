@@ -5,8 +5,6 @@ namespace Zxcvbn;
 use Match\MatchFactory;
 use Zxcvbn\Guess\EstimatorFactory;
 use Zxcvbn\Match\AbstractMatch;
-use Zxcvbn\Match\DataProvider\FrequencyLists;
-use Zxcvbn\Match\OmniMatch;
 
 class Zxcvbn
 {
@@ -43,8 +41,7 @@ class Zxcvbn
         Scoring $scoring,
         TimeEstimates $timeEstimates,
         Feedback $feedback
-    )
-    {
+    ) {
         $this->omniMatch = $omniMatch;
         $this->scoring = $scoring;
         $this->timeEstimates = $timeEstimates;

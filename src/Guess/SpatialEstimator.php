@@ -44,7 +44,7 @@ class SpatialEstimator extends AbstractEstimator
         if ($match['shifted_count']) {
             $S = $match['shifted_count'];
             $U = strlen($match['token']) - $match['shifted_count']; // unshifted count
-            if ($S === 0 or $U ===0) {
+            if ($S === 0 or $U === 0) {
                 $guesses *= 2;
             } else {
                 $shiftedVariations = 0;

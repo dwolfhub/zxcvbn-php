@@ -19,6 +19,29 @@ abstract class AbstractMatch implements MatchInterface
     protected $rankedDictionaries;
 
     /**
+     * usort function, compares 'i' then 'j' indexes
+     * @param array $a
+     * @param array $b
+     * @return int
+     */
+    protected static function sortByIAndJ($a, $b)
+    {
+        if ($a['i'] < $b['i']) {
+            return -1;
+        } else if ($a['i'] === $b['i']) {
+            if ($a['j'] < $b['j']) {
+                return -1;
+            } else if ($a['j'] === $b['j']) {
+                return 0;
+            } else {
+                return 1;
+            }
+        } else {
+            return 1;
+        }
+    }
+
+    /**
      * @return string
      */
     public function getPassword()
@@ -54,38 +77,6 @@ abstract class AbstractMatch implements MatchInterface
     }
 
     /**
-     * @param $name string
-     * @param $dictionary array
-     */
-    public function addRankedDictionary($name, $dictionary)
-    {
-        $this->rankedDictionaries[$name] = $this->buildRankedDict($dictionary);
-    }
-
-    /**
-     * usort function, compares 'i' then 'j' indexes
-     * @param array $a
-     * @param array $b
-     * @return int
-     */
-    protected static function sortByIAndJ($a, $b)
-    {
-        if ($a['i'] < $b['i']) {
-            return -1;
-        } else if ($a['i'] === $b['i']) {
-            if ($a['j'] < $b['j']) {
-                return -1;
-            } else if ($a['j'] === $b['j']) {
-                return 0;
-            } else {
-                return 1;
-            }
-        } else {
-            return 1;
-        }
-    }
-
-    /**
      * @param array $orderedList
      * @return array
      */
@@ -96,6 +87,15 @@ abstract class AbstractMatch implements MatchInterface
             $result[$orderedList[$i - 1]] = $i;
         }
         return $result;
+    }
+
+    /**
+     * @param $name string
+     * @param $dictionary array
+     */
+    public function addRankedDictionary($name, $dictionary)
+    {
+        $this->rankedDictionaries[$name] = $this->buildRankedDict($dictionary);
     }
 
     /**

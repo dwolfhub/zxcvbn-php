@@ -161,15 +161,6 @@ class DateMatch extends AbstractMatch
     }
 
     /**
-     * @param $candidate
-     * @return number
-     */
-    protected function metric($candidate)
-    {
-        return abs($candidate['year'] - Scoring::REFERENCE_YEAR);
-    }
-
-    /**
      * given a 3-tuple, discard if:
      * middle int is over 31 (for all dmy formats, years are never allowed in
      * the middle)
@@ -266,5 +257,14 @@ class DateMatch extends AbstractMatch
             // 15 -> 2015
             return $year + 2000;
         }
+    }
+
+    /**
+     * @param $candidate
+     * @return number
+     */
+    protected function metric($candidate)
+    {
+        return abs($candidate['year'] - Scoring::REFERENCE_YEAR);
     }
 }

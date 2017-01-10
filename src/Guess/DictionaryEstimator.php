@@ -1,8 +1,6 @@
 <?php
 namespace Zxcvbn\Guess;
 
-use Zxcvbn\Scoring;
-
 /**
  * Class DictionaryEstimator
  * @package Zxcvbn\Guess

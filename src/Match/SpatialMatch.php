@@ -2,8 +2,6 @@
 
 namespace Zxcvbn\Match;
 
-use Zxcvbn\Match\DataProvider\AdjacencyGraphs;
-
 class SpatialMatch extends AbstractMatch
 {
     /**
@@ -24,22 +22,6 @@ class SpatialMatch extends AbstractMatch
         usort($matches, [$this, 'sortByIAndJ']);
 
         return $matches;
-    }
-
-    /**
-     * @return array
-     */
-    public function getGraphs()
-    {
-        return $this->graphs;
-    }
-
-    /**
-     * @param array $graphs
-     */
-    public function setGraphs(array $graphs)
-    {
-        $this->graphs = $graphs;
     }
 
     /**
@@ -130,6 +112,22 @@ class SpatialMatch extends AbstractMatch
         }
 
         return $matches;
+    }
+
+    /**
+     * @return array
+     */
+    public function getGraphs()
+    {
+        return $this->graphs;
+    }
+
+    /**
+     * @param array $graphs
+     */
+    public function setGraphs(array $graphs)
+    {
+        $this->graphs = $graphs;
     }
 
 }

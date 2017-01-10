@@ -87,84 +87,6 @@ class L33tMatch extends AbstractMatch
     }
 
     /**
-     * @return array
-     */
-    public function getL33tTable()
-    {
-        return $this->l33tTable;
-    }
-
-    /**
-     * @param array $l33tTable
-     */
-    public function setL33tTable(array $l33tTable)
-    {
-        $this->l33tTable = $l33tTable;
-    }
-
-    /**
-     * @return AbstractMatch
-     */
-    public function getDictionaryMatch()
-    {
-        return $this->dictionaryMatch;
-    }
-
-    /**
-     * @param AbstractMatch $dictionaryMatch
-     */
-    public function setDictionaryMatch(AbstractMatch $dictionaryMatch)
-    {
-        $this->dictionaryMatch = $dictionaryMatch;
-    }
-
-    /**
-     * @param $string
-     * @param $chrMap
-     * @return string
-     */
-    protected function translate($chrMap)
-    {
-        $chars = [];
-        foreach (str_split($this->password) as $char) {
-            if (!empty($chrMap[$char])) {
-                array_push($chars, $chrMap[$char]);
-            } else {
-                array_push($chars, $char);
-            }
-        }
-
-        return implode('', $chars);
-    }
-
-    /**
-     * @param $table
-     * @return array
-     */
-    protected function relevantL33tSubtable($table)
-    {
-        $passwordChars = [];
-        foreach (str_split($this->password) as $char) {
-            $passwordChars[$char] = true;
-        }
-
-        $subTable = [];
-        foreach ($table as $letter => $subs) {
-            $relevantSubs = [];
-            foreach ($subs as $sub) {
-                if (in_array($sub, $passwordChars)) {
-                    $relevantSubs[] = $sub;
-                }
-            }
-            if (!empty($relevantSubs)) {
-                $subTable[$letter] = $relevantSubs;
-            }
-        }
-
-        return $subTable;
-    }
-
-    /**
      * @param array $table
      * @return array
      */
@@ -184,33 +106,6 @@ class L33tMatch extends AbstractMatch
         }
 
         return $subDicts;
-    }
-
-    /**
-     * @param $subs
-     */
-    protected function deDup($subs)
-    {
-        $deduped = [];
-        $members = [];
-        foreach ($subs as $sub) {
-            $assoc = [];
-            foreach ($sub as $k => $v) {
-                $assoc[] = [$v, $k];
-            }
-            sort($assoc);
-            $labels = [];
-            foreach ($assoc as $k => $v) {
-                $labels[] = $k . ',' . $v;
-            }
-            $label = implode('-', $labels);
-            if (!array_key_exists($label, $members)) {
-                $members[$label] = true;
-                array_push($deduped, $sub);
-            }
-        }
-
-        return $deduped;
     }
 
     /**
@@ -252,6 +147,111 @@ class L33tMatch extends AbstractMatch
         $subs = $this->deDup($nextSubs);
 
         return $this->helper($restKeys, $subs);
+    }
+
+    /**
+     * @param $subs
+     */
+    protected function deDup($subs)
+    {
+        $deduped = [];
+        $members = [];
+        foreach ($subs as $sub) {
+            $assoc = [];
+            foreach ($sub as $k => $v) {
+                $assoc[] = [$v, $k];
+            }
+            sort($assoc);
+            $labels = [];
+            foreach ($assoc as $k => $v) {
+                $labels[] = $k . ',' . $v;
+            }
+            $label = implode('-', $labels);
+            if (!array_key_exists($label, $members)) {
+                $members[$label] = true;
+                array_push($deduped, $sub);
+            }
+        }
+
+        return $deduped;
+    }
+
+    /**
+     * @param $string
+     * @param $chrMap
+     * @return string
+     */
+    protected function translate($chrMap)
+    {
+        $chars = [];
+        foreach (str_split($this->password) as $char) {
+            if (!empty($chrMap[$char])) {
+                array_push($chars, $chrMap[$char]);
+            } else {
+                array_push($chars, $char);
+            }
+        }
+
+        return implode('', $chars);
+    }
+
+    /**
+     * @return array
+     */
+    public function getL33tTable()
+    {
+        return $this->l33tTable;
+    }
+
+    /**
+     * @param array $l33tTable
+     */
+    public function setL33tTable(array $l33tTable)
+    {
+        $this->l33tTable = $l33tTable;
+    }
+
+    /**
+     * @return AbstractMatch
+     */
+    public function getDictionaryMatch()
+    {
+        return $this->dictionaryMatch;
+    }
+
+    /**
+     * @param AbstractMatch $dictionaryMatch
+     */
+    public function setDictionaryMatch(AbstractMatch $dictionaryMatch)
+    {
+        $this->dictionaryMatch = $dictionaryMatch;
+    }
+
+    /**
+     * @param $table
+     * @return array
+     */
+    protected function relevantL33tSubtable($table)
+    {
+        $passwordChars = [];
+        foreach (str_split($this->password) as $char) {
+            $passwordChars[$char] = true;
+        }
+
+        $subTable = [];
+        foreach ($table as $letter => $subs) {
+            $relevantSubs = [];
+            foreach ($subs as $sub) {
+                if (in_array($sub, $passwordChars)) {
+                    $relevantSubs[] = $sub;
+                }
+            }
+            if (!empty($relevantSubs)) {
+                $subTable[$letter] = $relevantSubs;
+            }
+        }
+
+        return $subTable;
     }
 
 }

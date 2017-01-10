@@ -13,6 +13,11 @@ abstract class AbstractEstimator implements EstimatorInterface
     const MIN_YEAR_SPACE = 20;
 
     /**
+     * @return int
+     */
+    abstract public function estimate($match);
+
+    /**
      * @param $n
      * @param $k
      * @return int
@@ -36,9 +41,4 @@ abstract class AbstractEstimator implements EstimatorInterface
 
         return $r;
     }
-
-    /**
-     * @return int
-     */
-    abstract public function estimate($match);
 }
