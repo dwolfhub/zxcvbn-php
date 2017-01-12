@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit backupGlobals="false"
          backupStaticAttributes="false"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="true"
@@ -12,6 +9,9 @@
     <testsuites>
         <testsuite name="zxcvbn-ported">
             <directory>./test/ported</directory>
+        </testsuite>
+        <testsuite name="zxcvbn-functional">
+            <directory>./test/functional</directory>
         </testsuite>
         <testsuite name="zxcvbn-unit">
             <directory>./test/unit</directory>

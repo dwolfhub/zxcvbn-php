@@ -1,6 +1,5 @@
 <?php
-
-namespace Match;
+namespace Zxcvbn\Match;
 
 use InvalidArgumentException;
 use Zxcvbn\Match\AbstractMatch;

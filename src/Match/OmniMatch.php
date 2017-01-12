@@ -2,8 +2,6 @@
 
 namespace Zxcvbn\Match;
 
-use Match\MatchFactory;
-
 /**
  * Class OmniMatch
  * @package Zxcvbn\Match

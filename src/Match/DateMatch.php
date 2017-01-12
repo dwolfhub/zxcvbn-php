@@ -79,7 +79,7 @@ class DateMatch extends AbstractMatch
 
         // dates without separators are between length 4 '1191' and 8 '11111991'
         for ($i = 0; $i < strlen($this->password) - 3; $i++) {
-            for ($j = $i + 3; $j < $i + 8; $i++) {
+            for ($j = $i + 3; $j < $i + 8; $j++) {
                 if ($j >= strlen($this->password)) {
                     break;
                 }

@@ -22,7 +22,7 @@ class ZxcvbnTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $mockMatch->expects($this->once())
             ->method('getMatches')
-            ->willReturn([]); // @todo
+            ->willReturn(['mockmatch']);
         $mockMatch->expects($this->once())
             ->method('addRankedDictionary')
             ->with('user_inputs', ['pass', 'word']); // @todo
@@ -33,10 +33,10 @@ class ZxcvbnTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $mockScoring->expects($this->once())
             ->method('mostGuessableMatchSequence')
+            ->with('password', ['mockmatch'])
             ->willReturn([
                 'guesses' => 1,
-                'sequence' => [
-                ],
+                'sequence' => ['mocksequence'],
             ]);
 
         $mockTimeEstimates = $this->getMockBuilder(TimeEstimates::class)
@@ -74,7 +74,7 @@ class ZxcvbnTest extends \PHPUnit_Framework_TestCase
         $strength = $this->zxcvbn->calculateStrength('password', ['pass', 'word']);
 
         $this->assertEquals(1, $strength['guesses']);
-        $this->assertEquals([], $strength['sequence']);
+        $this->assertEquals(['mocksequence'], $strength['sequence']);
         $this->assertEquals(1, $strength['score']);
         $this->assertEquals('THIS IS A WARNING', $strength['feedback']['warning']);
         $this->assertContains('SUGGESTION 1', $strength['feedback']['suggestions']);
