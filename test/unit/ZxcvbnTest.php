@@ -29,6 +29,8 @@ class ZxcvbnTest extends \PHPUnit_Framework_TestCase
             ->method('mostGuessableMatchSequence')
             ->willReturn([
                 'guesses' => 1,
+                'sequence' => [
+                ],
             ]);
 
         $mockTimeEstimates = $this->getMockBuilder(TimeEstimates::class)
@@ -36,18 +38,42 @@ class ZxcvbnTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $mockTimeEstimates->expects($this->once())
             ->method('estimateAttackTimes')
-            ->willReturn();
+            ->willReturn([
+                'score' => 1,
+            ]);
 
         $mockFeedback = $this->getMockBuilder(Feedback::class)
             ->setMethods(['getFeedback'])
             ->getMock();
+        $mockFeedback->expects($this->once())
+            ->method('getFeedback')
+            ->willReturn([
+                'warning' => 'THIS IS A WARNING',
+                'suggestions' => [
+                    'SUGGESTION 1',
+                    'SUGGESTION 2',
+                ]
+            ]);
 
-        $this->zxcvbn = new Zxcvbn($mockMatch, $mockScoring, $mockTimeEstimates, $mockFeedback);
+        $this->zxcvbn = new Zxcvbn(
+            $mockMatch,
+            $mockScoring,
+            $mockTimeEstimates,
+            $mockFeedback
+        );
     }
 
-    public function testIsTesting()
+    public function testCalculateStrength()
     {
-        // @todo remove
-        $this->assertFalse(0, $this->zxcvbn->calculateStrength('password', []));
+        $strength = $this->zxcvbn->calculateStrength('password', []);
+
+        $this->assertEquals(1, $strength['guesses']);
+        $this->assertEquals([], $strength['sequence']);
+        $this->assertEquals(1, $strength['score']);
+        $this->assertEquals('THIS IS A WARNING', $strength['feedback']['warning']);
+        $this->assertContains('SUGGESTION 1', $strength['feedback']['suggestions']);
+        $this->assertContains('SUGGESTION 2', $strength['feedback']['suggestions']);
+        $this->assertInternalType('float', $strength['calc_time']);
+        $this->assertLessThan(.1, $strength['calc_time']);
     }
 }
