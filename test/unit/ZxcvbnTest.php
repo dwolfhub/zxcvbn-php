@@ -18,8 +18,14 @@ class ZxcvbnTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $mockMatch = $this->getMockBuilder(AbstractMatch::class)
-            ->setMethods(['getMatches'])
+            ->setMethods(['getMatches', 'addRankedDictionary'])
             ->getMock();
+        $mockMatch->expects($this->once())
+            ->method('getMatches')
+            ->willReturn([]); // @todo
+        $mockMatch->expects($this->once())
+            ->method('addRankedDictionary')
+            ->with('user_inputs', ['pass', 'word']); // @todo
 
         $mockScoring = $this->getMockBuilder(Scoring::class)
             ->disableOriginalConstructor()
@@ -65,7 +71,7 @@ class ZxcvbnTest extends \PHPUnit_Framework_TestCase
 
     public function testCalculateStrength()
     {
-        $strength = $this->zxcvbn->calculateStrength('password', []);
+        $strength = $this->zxcvbn->calculateStrength('password', ['pass', 'word']);
 
         $this->assertEquals(1, $strength['guesses']);
         $this->assertEquals([], $strength['sequence']);
