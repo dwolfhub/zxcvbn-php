@@ -16,9 +16,9 @@ class DateMatchTest extends \PHPUnit_Framework_TestCase
         $this->dateMatch = new DateMatch();
     }
 
-    public function testIsTesting()
+    public function testReturnsMatch()
     {
-        $this->dateMatch->setPassword('password');
+        $this->dateMatch->setPassword('1.1.91');
         $this->assertEquals([], $this->dateMatch->getMatches());
     }
 }

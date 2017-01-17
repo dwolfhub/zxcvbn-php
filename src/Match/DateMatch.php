@@ -84,13 +84,13 @@ class DateMatch extends AbstractMatch
                     break;
                 }
 
-                $token = substr($this->password, $i, $j - $i);
+                $token = substr($this->password, $i, $j - $i + 1);
                 if (!preg_match($maybeDateNoSeparator, $token)) {
                     continue;
                 }
 
                 $candidates = [];
-                foreach (self::DATE_SPLITS[strlen($token)] as $k => $l) {
+                foreach (self::DATE_SPLITS[strlen($token)] as list($k, $l)) {
                     $dmy = $this->mapIntsToDMY([
                         (int)substr($token, 0, $k),
                         (int)substr($token, $k, $l - $k),
