@@ -19,14 +19,14 @@ class DictionaryMatch extends AbstractMatch
         foreach ($this->getRankedDictionaries() as $dictionaryName => $rankedDict) {
             for ($i = 0; $i < $length; $i++) {
                 for ($j = $i; $j < $length; $j++) {
-                    if (in_array(substr($passwordLower, $i, $j - $i), $rankedDict)) {
-                        $word = substr($passwordLower, $i, $j - $i);
+                    if (array_key_exists(substr($passwordLower, $i, $j - $i + 1), $rankedDict)) {
+                        $word = substr($passwordLower, $i, $j - $i + 1);
                         $rank = $rankedDict[$word];
                         array_push($matches, [
                             'pattern' => 'dictionary',
                             'i' => $i,
                             'j' => $j,
-                            'token' => substr($this->password, $i, $j - $i),
+                            'token' => substr($this->password, $i, $j - $i + 1),
                             'matched_word' => $word,
                             'rank' => $rank,
                             'dictionary_name' => $dictionaryName,

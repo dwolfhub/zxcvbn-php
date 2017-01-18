@@ -75,12 +75,13 @@ class DateMatch extends AbstractMatch
     {
         $matches = [];
         $maybeDateNoSeparator = '/^\d{4,8}$/';
-        $maybeDateWithSeparator = '/^(\d{1,4})([\s/\\_.-])(\d{1,2})\2(\d{1,4})$/';
+        $maybeDateWithSeparator = '/^(\d{1,4})([\s\/\\_.-])(\d{1,2})\2(\d{1,4})$/';
+        $passwordLength = strlen($this->password);
 
         // dates without separators are between length 4 '1191' and 8 '11111991'
-        for ($i = 0; $i < strlen($this->password) - 3; $i++) {
+        for ($i = 0; $i < $passwordLength - 3; $i++) {
             for ($j = $i + 3; $j < $i + 8; $j++) {
-                if ($j >= strlen($this->password)) {
+                if ($j >= $passwordLength) {
                     break;
                 }
 
@@ -134,6 +135,41 @@ class DateMatch extends AbstractMatch
             }
         }
 
+        // dates with separators are between length 6 '1/1/91' and 10 '11/11/1991'
+        for ($i = 0; $i < $passwordLength - 5; $i++) {
+            for ($j = $i + 5; $j < $i + 10; $j++) {
+                if ($j >= $passwordLength) {
+                    break;
+                }
+
+                $token = substr($this->password, $i, $j - $i + 1);
+                preg_match($maybeDateWithSeparator, $token, $rxMatch);
+                if (!$rxMatch) {
+                    continue;
+                }
+
+                $dmy = $this->mapIntsToDMY([
+                    (int)$rxMatch[1],
+                    (int)$rxMatch[3],
+                    (int)$rxMatch[4],
+                ]);
+                if (!$dmy) {
+                    continue;
+                }
+
+                array_push($matches, [
+                    'pattern' => 'date',
+                    'token' => $token,
+                    'i' => $i,
+                    'j' => $j,
+                    'separator' => $rxMatch[2],
+                    'year' => $dmy['year'],
+                    'month' => $dmy['month'],
+                    'day' => $dmy['day'],
+                ]);
+            }
+        }
+
         // matches now contains all valid date strings in a way that is tricky to
         // capture with regexes only. while thorough, it will contain some
         // unintuitive noise:
@@ -145,7 +181,7 @@ class DateMatch extends AbstractMatch
         // to reduce noise, remove date matches that are strict substrings of others
         usort($matches, [$this, 'sortByIAndJ']);
 
-        return array_filter($matches, function ($match) use ($matches) {
+        return array_values(array_filter($matches, function ($match) use ($matches) {
             $isSubmatch = false;
             foreach ($matches as $other) {
                 if ($match === $other) {
@@ -157,7 +193,7 @@ class DateMatch extends AbstractMatch
                 }
             }
             return !$isSubmatch;
-        });
+        }));
     }
 
     /**
@@ -205,11 +241,11 @@ class DateMatch extends AbstractMatch
 
         $possibleFourDigitSplits = [
             [$ints[2], array_slice($ints, 0, 2)],
-            [$ints[0], array_slice($ints, 1, 3)],
+            [$ints[0], array_slice($ints, 1, 2)],
         ];
-        foreach ($possibleFourDigitSplits as $y => $rest) {
+        foreach ($possibleFourDigitSplits as list($y, $rest)) {
             if (self::DATE_MIN_YEAR <= $y and $y <= self::DATE_MAX_YEAR) {
-                $dm = $this->mapIntsToDMY($rest);
+                $dm = $this->mapIntsToDM($rest);
                 if ($dm) {
                     return [
                         'year' => $y,
@@ -227,8 +263,8 @@ class DateMatch extends AbstractMatch
 
         // given no four-digit year, two digit years are the most flexible int to
         // match, so try to parse a day-month out of ints[0..1] or ints[1..0]
-        foreach ($possibleFourDigitSplits as $y => $rest) {
-            $dm = $this->mapIntsToDMY($rest);
+        foreach ($possibleFourDigitSplits as list($y, $rest)) {
+            $dm = $this->mapIntsToDM($rest);
             if ($dm) {
                 $y = $this->twoToFourDigitYear($y);
                 return [
@@ -240,6 +276,18 @@ class DateMatch extends AbstractMatch
         }
 
         return null;
+    }
+
+    protected function mapIntsToDM($ints)
+    {
+        foreach ([$ints, array_reverse($ints)] as list($d, $m)) {
+            if (1 <= $d and $d <= 31 and 1 <= $m and $m <= 12) {
+                return [
+                    'day' => $d,
+                    'month' => $m,
+                ];
+            }
+        }
     }
 
     /**
