@@ -65,7 +65,7 @@ class EstimatorFactory
         } else if ($type === self::TYPE_SPATIAL) {
             return new SpatialEstimator();
         } else {
-            throw new InvalidArgumentException(sprintf('Estimator type %s does not exist.', $type));
+            throw new InvalidArgumentException(sprintf('Estimator type "%s" does not exist', $type));
         }
     }
 }

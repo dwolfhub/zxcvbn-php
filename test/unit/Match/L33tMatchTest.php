@@ -9,17 +9,15 @@ class L33tMatchTest extends \PHPUnit_Framework_TestCase
     /**
      * @var L33tMatch
      */
-    protected $instance;
+    protected $l33tMatch;
 
     public function setUp()
     {
-        $this->instance = new L33tMatch();
+        $this->l33tMatch = new L33tMatch();
     }
 
-    public function testIsTesting()
+    public function test()
     {
-        $this->markTestIncomplete();
-        // @todo remove
-        $this->assertFalse(true);
+
     }
 }
