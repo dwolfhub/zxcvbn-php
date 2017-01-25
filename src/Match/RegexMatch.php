@@ -14,10 +14,10 @@ class RegexMatch extends AbstractMatch
     public function getMatches()
     {
         $matches = [];
-        $rxMatch = preg_match('/19\d\d|200\d|201\d/', $this->password, $matches);
+        preg_match('/19\d\d|200\d|201\d/', $this->password, $rxMatch);
         if ($rxMatch) {
-            $token = $matches[0];
-            $startPos = strpos($token, $this->password);
+            $token = $rxMatch[0];
+            $startPos = strpos($this->password, $token);
             array_push($matches, [
                 'pattern' => 'regex',
                 'token' => $token,
