@@ -32,20 +32,4 @@ class RegexMatch extends AbstractMatch
 
         return $matches;
     }
-
-    /**
-     * @return string
-     */
-    public function getRegexen()
-    {
-        return $this->regexen;
-    }
-
-    /**
-     * @param string $regex
-     */
-    public function setRegexen($regex)
-    {
-        $this->regexen = $regex;
-    }
 }
