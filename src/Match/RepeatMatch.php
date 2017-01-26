@@ -111,7 +111,7 @@ class RepeatMatch extends AbstractMatch
     /**
      * @param AbstractMatch $omniMatch
      */
-    public function setOmniMatch(OmniMatch $omniMatch)
+    public function setOmniMatch(AbstractMatch $omniMatch)
     {
         $this->omniMatch = $omniMatch;
     }
