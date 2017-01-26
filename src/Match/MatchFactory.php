@@ -2,6 +2,7 @@
 namespace Zxcvbn\Match;
 
 use InvalidArgumentException;
+use Zxcvbn\Guess\EstimatorFactory;
 use Zxcvbn\Match\AbstractMatch;
 use Zxcvbn\Match\DataProvider\AdjacencyGraphs;
 use Zxcvbn\Match\DateMatch;
@@ -94,8 +95,10 @@ class MatchFactory
             $match = new RegexMatch();
 
         } else if ($type === self::TYPE_REPEAT) {
+            $scoring = new Scoring(new EstimatorFactory());
+
             $match = new RepeatMatch();
-            $match->setScoring(new Scoring($password));
+            $match->setScoring($scoring);
             $match->setOmniMatch(
                 $this->create(self::TYPE_OMNI, $password)
             );
