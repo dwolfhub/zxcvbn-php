@@ -106,7 +106,7 @@ class MatchFactory
         } else if ($type === self::TYPE_REVERSE_DICTIONARY) {
             $match = new ReverseDictionaryMatch();
             $match->setDictionaryMatch(
-                $this->create(self::TYPE_DICTIONARY, $password)
+                $this->create(self::TYPE_DICTIONARY, strrev($password))
             );
 
         } else if ($type === self::TYPE_SEQUENCE) {
