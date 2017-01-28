@@ -31,7 +31,6 @@ class RepeatMatchTest extends \PHPUnit_Framework_TestCase
     {
         $this->markTestIncomplete();
 
-
         $this->repeatMatch->setPassword('abcabc');
         $this->assertEquals([], $this->repeatMatch->getMatches());
     }

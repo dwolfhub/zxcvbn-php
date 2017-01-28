@@ -2,6 +2,7 @@
 
 namespace unit\Match;
 
+use Zxcvbn\Match\DateMatch;
 use Zxcvbn\Match\MatchFactory;
 
 class MatchFactoryTest extends \PHPUnit_Framework_TestCase
@@ -9,17 +10,15 @@ class MatchFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var MatchFactory
      */
-    protected $instance;
+    protected $matchFactory;
 
     public function setUp()
     {
-        $this->instance = new MatchFactory();
+        $this->matchFactory = new MatchFactory();
     }
 
-    public function testIsTesting()
+    public function testReturnsDateMatch()
     {
-        $this->markTestIncomplete();
-        // @todo remove
-        $this->assertFalse(true);
+        $this->assertInstanceOf(DateMatch::class, $this->matchFactory->create(MatchFactory::TYPE_DATE, 'testpassword'));
     }
 }
