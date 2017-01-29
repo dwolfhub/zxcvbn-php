@@ -3,12 +3,18 @@
 namespace functional;
 
 use PHPUnit_Framework_TestCase;
+use Zxcvbn\Zxcvbn;
 
 class ZxcvbnTest extends PHPUnit_Framework_TestCase
 {
-    // @todo
     public function testIsTesting()
     {
-        $this->assertFalse(false);
+        $this->markTestIncomplete();
+
+        // @todo fix dictionary match first
+        $this->assertEquals(
+            [],
+            Zxcvbn::passwordStrength('testpassword', [])
+        );
     }
 }

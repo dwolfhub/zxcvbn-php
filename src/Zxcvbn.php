@@ -2,7 +2,7 @@
 
 namespace Zxcvbn;
 
-use Match\MatchFactory;
+use Zxcvbn\Match\MatchFactory;
 use Zxcvbn\Guess\EstimatorFactory;
 use Zxcvbn\Match\AbstractMatch;
 

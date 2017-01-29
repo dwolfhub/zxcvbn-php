@@ -24,7 +24,7 @@ abstract class AbstractMatch implements MatchInterface
      * @param array $b
      * @return int
      */
-    protected static function sortByIAndJ($a, $b)
+    public static function sortByIAndJ($a, $b)
     {
         if ($a['i'] < $b['i']) {
             return -1;
