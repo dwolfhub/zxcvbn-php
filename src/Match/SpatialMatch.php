@@ -7,7 +7,7 @@ class SpatialMatch extends AbstractMatch
     /**
      * @var array
      */
-    protected $graphs;
+    protected $graphs = [];
 
     /**
      * {@inheritdoc}

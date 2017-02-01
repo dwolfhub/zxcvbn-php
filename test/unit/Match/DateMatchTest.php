@@ -105,4 +105,10 @@ class DateMatchTest extends \PHPUnit_Framework_TestCase
             ],
         ], $this->dateMatch->getMatches());
     }
+
+    public function testReturnsNoMatch()
+    {
+        $this->dateMatch->setPassword('testpassword');
+        $this->assertEquals([], $this->dateMatch->getMatches());
+    }
 }
