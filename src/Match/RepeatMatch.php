@@ -58,7 +58,7 @@ class RepeatMatch extends AbstractMatch
             }
 
             $i = strpos($this->password, $match[0]);
-            $j = $i + strlen($match[0] - 1);
+            $j = $i + strlen($match[0]) - 1;
 
             // recursively match and score the base string
             $baseAnalysis = $this->scoring->mostGuessableMatchSequence(
@@ -115,6 +115,5 @@ class RepeatMatch extends AbstractMatch
     {
         $this->omniMatch = $omniMatch;
     }
-
 
 }

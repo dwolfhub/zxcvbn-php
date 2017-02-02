@@ -15,23 +15,74 @@ class RepeatMatchTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $scoring = $this->getMockBuilder(Scoring::class)
-            ->disableOriginalConstructor()
-            ->setMethods()
-            ->getMock();
-
-        $omniMatch = $this->getMockForAbstractClass(AbstractMatch::class);
-
         $this->repeatMatch = new RepeatMatch();
-        $this->repeatMatch->setScoring($scoring);
-        $this->repeatMatch->setOmniMatch($omniMatch);
     }
 
-    public function testIsTesting()
+    public function testBasicRepeat()
     {
-        $this->markTestIncomplete();
+        $omniMatch = $this->getMockForAbstractClass(AbstractMatch::class);
+        $omniMatch->expects($this->once())
+            ->method('getMatches')
+            ->willReturn([]);
+        $this->repeatMatch->setOmniMatch($omniMatch);
+
+        $scoring = $this->getMockBuilder(Scoring::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['mostGuessableMatchSequence'])
+            ->getMock();
+        $scoring->expects($this->once())
+            ->method('mostGuessableMatchSequence')
+            ->willReturn([
+                'sequence' => 'testsequence',
+                'guesses' => 987654321
+            ]);
+        $this->repeatMatch->setScoring($scoring);
 
         $this->repeatMatch->setPassword('abcabc');
-        $this->assertEquals([], $this->repeatMatch->getMatches());
+        $this->assertEquals([
+            [
+                'pattern' => 'repeat',
+                'i' => 0,
+                'j' => 5,
+                'token' => 'abcabc',
+                'base_token' => 'abc',
+                'base_guesses' => 987654321,
+                'base_matches' => 'testsequence',
+                'repeat_count' => 2,
+            ]
+        ], $this->repeatMatch->getMatches());
+    }
+
+    public function testMultipleRepeated()
+    {
+        $omniMatch = $this->getMockForAbstractClass(AbstractMatch::class);
+        $omniMatch->method('getMatches')
+            ->willReturn([]);
+        $this->repeatMatch->setOmniMatch($omniMatch);
+
+        $scoring = $this->getMockBuilder(Scoring::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['mostGuessableMatchSequence'])
+            ->getMock();
+        $scoring->method('mostGuessableMatchSequence')
+            ->willReturn([
+                'sequence' => 'testsequence',
+                'guesses' => 987654321
+            ]);
+        $this->repeatMatch->setScoring($scoring);
+
+        $this->repeatMatch->setPassword('aaaaaaaa');
+        $this->assertEquals([
+            [
+                'pattern' => 'repeat',
+                'i' => 0,
+                'j' => 7,
+                'token' => 'aaaaaaaa',
+                'base_token' => 'a',
+                'base_guesses' => 987654321,
+                'base_matches' => 'testsequence',
+                'repeat_count' => 8,
+            ]
+        ], $this->repeatMatch->getMatches());
     }
 }
