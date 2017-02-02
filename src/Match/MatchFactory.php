@@ -5,6 +5,7 @@ use InvalidArgumentException;
 use Zxcvbn\Guess\EstimatorFactory;
 use Zxcvbn\Match\AbstractMatch;
 use Zxcvbn\Match\DataProvider\AdjacencyGraphs;
+use Zxcvbn\Match\DataProvider\FrequencyLists;
 use Zxcvbn\Match\DateMatch;
 use Zxcvbn\Match\DictionaryMatch;
 use Zxcvbn\Match\L33tMatch;
@@ -80,6 +81,7 @@ class MatchFactory
 
         } else if ($type === self::TYPE_DICTIONARY) {
             $match = new DictionaryMatch();
+            $match->setRankedDictionaries(FrequencyLists::getData());
 
         } else if ($type === self::TYPE_L33T) {
             $match = new L33tMatch();

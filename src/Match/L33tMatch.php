@@ -44,7 +44,7 @@ class L33tMatch extends AbstractMatch
         $matches = [];
 
         foreach ($this->enumerateL33tSubs() as $sub) {
-            if (!count($sub)) {
+            if (empty($sub)) {
                 break;
             }
 
@@ -60,7 +60,7 @@ class L33tMatch extends AbstractMatch
                 // subset of mappings in sub that are in use for this match
                 $matchSub = [];
                 foreach ($sub as $subbedChr => $chr) {
-                    if (strpos($token, $subbedPassword) !== false) {
+                    if (strpos($token, (string) $subbedChr) !== false) {
                         $matchSub[$subbedChr] = $chr;
                     }
                 }
@@ -73,6 +73,7 @@ class L33tMatch extends AbstractMatch
                     $subDisplays[] = sprintf('%s -> %s', $k, $v);
                 }
                 $match['sub_display'] = implode(', ', $subDisplays);
+
                 array_push($matches, $match);
             }
         }
@@ -87,19 +88,18 @@ class L33tMatch extends AbstractMatch
     }
 
     /**
-     * @param array $table
      * @return array
      */
     protected function enumerateL33tSubs()
     {
-        $keys = array_keys($this->l33tTable);
+        $keys = array_keys($this->relevantL33tSubtable($this->l33tTable));
         $subs = [[]];
 
         $subs = $this->helper($keys, $subs);
         $subDicts = []; // convert from assoc lists to dicts
         foreach ($subs as $sub) {
             $subDict = [];
-            foreach ($sub as $l33tChr => $chr) {
+            foreach ($sub as list($l33tChr, $chr)) {
                 $subDict[$l33tChr] = $chr;
             }
             array_push($subDicts, $subDict);
@@ -111,6 +111,7 @@ class L33tMatch extends AbstractMatch
     /**
      * @param $keys
      * @param $subs
+     * @return array
      */
     protected function helper($keys, $subs)
     {
@@ -124,14 +125,14 @@ class L33tMatch extends AbstractMatch
         foreach ($this->l33tTable[$firstKey] as $l33tChr) {
             foreach ($subs as $sub) {
                 $dupL33tIndex = -1;
-                for ($i = 0; $i < strlen($sub); $i++) {
+                for ($i = 0; $i < count($sub); $i++) {
                     if ($sub[$i][0] == $l33tChr) {
                         $dupL33tIndex = $i;
                         break;
                     }
                 }
                 if ($dupL33tIndex == -1) {
-                    $subExtension = str_split($sub);
+                    $subExtension = $sub;
                     array_push($subExtension, [$l33tChr, $firstKey]);
                     array_push($nextSubs, $subExtension);
                 } else {
@@ -151,6 +152,7 @@ class L33tMatch extends AbstractMatch
 
     /**
      * @param $subs
+     * @return array
      */
     protected function deDup($subs)
     {
@@ -158,15 +160,17 @@ class L33tMatch extends AbstractMatch
         $members = [];
         foreach ($subs as $sub) {
             $assoc = [];
-            foreach ($sub as $k => $v) {
+            foreach ($sub as list($k, $v)) {
                 $assoc[] = [$v, $k];
             }
             sort($assoc);
+
             $labels = [];
-            foreach ($assoc as $k => $v) {
+            foreach ($assoc as list($k, $v)) {
                 $labels[] = $k . ',' . $v;
             }
             $label = implode('-', $labels);
+
             if (!array_key_exists($label, $members)) {
                 $members[$label] = true;
                 array_push($deduped, $sub);
@@ -177,7 +181,6 @@ class L33tMatch extends AbstractMatch
     }
 
     /**
-     * @param $string
      * @param $chrMap
      * @return string
      */
@@ -242,7 +245,7 @@ class L33tMatch extends AbstractMatch
         foreach ($table as $letter => $subs) {
             $relevantSubs = [];
             foreach ($subs as $sub) {
-                if (in_array($sub, $passwordChars)) {
+                if (array_key_exists($sub, $passwordChars)) {
                     $relevantSubs[] = $sub;
                 }
             }

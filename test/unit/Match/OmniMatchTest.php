@@ -9,17 +9,52 @@ class OmniMatchTest extends \PHPUnit_Framework_TestCase
     /**
      * @var OmniMatch
      */
-    protected $instance;
+    protected $omniMatch;
 
     public function setUp()
     {
-        $this->instance = new OmniMatch();
+        $this->omniMatch = new OmniMatch();
     }
 
-    public function testIsTesting()
+    public function testReturnsDateMatches()
     {
         $this->markTestIncomplete();
-        // @todo remove
-        $this->assertFalse(true);
+        $this->omniMatch->setPassword('2005');
+        $this->assertTrue([], $this->omniMatch->getMatches());
+    }
+
+    public function testReturnsDictionaryMatches()
+    {
+        
+    }
+
+    public function testReturnsL33tMatches()
+    {
+        
+    }
+
+    public function testReturnsRegexMatches()
+    {
+
+    }
+
+    public function testReturnsRepeatMatches()
+    {
+
+    }
+
+    public function testReturnsReverseDictionaryMatches()
+    {
+
+    }
+
+    public function testReturnsSequenceMatches()
+    {
+
+    }
+
+    public function testReturnsSpatialMatches()
+    {
+
     }
 }

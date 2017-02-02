@@ -66,12 +66,15 @@ abstract class AbstractMatch implements MatchInterface
     }
 
     /**
-     * @param array $rankedDictionaries
+     * @param array $dictionaries
      */
     public function setRankedDictionaries(array $dictionaries)
     {
         $this->rankedDictionaries = [];
         foreach ($dictionaries as $name => $lst) {
+            if (is_string($lst) === true) {
+                $lst = explode(',', $lst);
+            }
             $this->rankedDictionaries[$name] = $this->buildRankedDict($lst);
         }
     }

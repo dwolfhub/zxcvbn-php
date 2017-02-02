@@ -14,28 +14,71 @@ class L33tMatchTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $mockDictionaryMatch = $this->getMockBuilder(
-            DictionaryMatch::class
-        )
-            ->setMethods(['getMatches'])
-            ->getmock();
-        $mockDictionaryMatch->expects($this->once())
-            ->method('getMatches')
-            ->willReturn([]);
-
         $this->l33tMatch = new L33tMatch();
+
+        $dictionaryMatch = new DictionaryMatch();
+        $dictionaryMatch->setRankedDictionaries([
+            'test_dictionary' => [
+                'password',
+            ]
+        ]);
         $this->l33tMatch->setDictionaryMatch(
-            $mockDictionaryMatch
+            $dictionaryMatch
         );
+
         $this->l33tMatch->setL33tTable(
-            L33tMatch::DEFAULT_L33T_TABLE
+            [
+                'a' => ['4', '@'],
+                'c' => ['(', '{', '[', '<'],
+                'g' => ['6', '9'],
+                'o' => ['0'],
+            ]
         );
     }
 
-    public function testIsTesting()
+    public function testL33tMatchOneSub()
     {
-        $this->markTestIncomplete();
-        $this->l33tMatch->setPassword('password');
-        $this->assertEquals([], $this->l33tMatch->getMatches());
+        $this->l33tMatch->setPassword('p@ssword');
+        $this->assertEquals([
+            [
+                'pattern' => 'dictionary',
+                'i' => 0,
+                'j' => 7,
+                'token' => 'p@ssword',
+                'matched_word' => 'password',
+                'rank' => 1,
+                'dictionary_name' => 'test_dictionary',
+                'reversed' => false,
+                'l33t' => true,
+                'sub' => [
+                    '@' => 'a'
+                ],
+                'sub_display' => '@ -> a',
+            ]
+        ], $this->l33tMatch->getMatches());
     }
+
+    public function testL33tMatchTwoSubs()
+    {
+        $this->l33tMatch->setPassword('p4ssw0rd');
+        $this->assertEquals([
+            [
+                'pattern' => 'dictionary',
+                'i' => 0,
+                'j' => 7,
+                'token' => 'p4ssw0rd',
+                'matched_word' => 'password',
+                'rank' => 1,
+                'dictionary_name' => 'test_dictionary',
+                'reversed' => false,
+                'l33t' => true,
+                'sub' => [
+                    '4' => 'a',
+                    '0' => 'o',
+                ],
+                'sub_display' => '4 -> a, 0 -> o',
+            ]
+        ], $this->l33tMatch->getMatches());
+    }
+
 }
