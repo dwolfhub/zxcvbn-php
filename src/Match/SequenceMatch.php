@@ -27,12 +27,6 @@ class SequenceMatch extends AbstractMatch
     const MAX_DELTA = 5;
 
     /**
-     * @todo refactor this to use local var
-     * @var array
-     */
-    protected $result;
-
-    /**
      * {@inheritdoc}
      */
     public function getMatches()
@@ -41,36 +35,36 @@ class SequenceMatch extends AbstractMatch
             return [];
         }
 
-        $this->result = [];
+        $result = [];
         $i = 0;
         $lastDelta = null;
 
         for ($k = 1; $k < strlen($this->password); $k++) {
-            $delta = ord(substr($this->password, $k, 1)) - ord(substr($this->password, $k - 1, 0));
+            $delta = ord(substr($this->password, $k, 1)) - ord(substr($this->password, $k - 1, 1));
             if ($lastDelta === null) {
                 $lastDelta = $delta;
-                continue;
             }
             if ($delta === $lastDelta) {
                 continue;
             }
-
             $j = $k - 1;
-            $this->update($i, $j, $lastDelta);
+            $result = $this->update($result, $i, $j, $lastDelta);
             $i = $j;
             $lastDelta = $delta;
         }
-        $this->update($i, strlen($this->password) - 1, $lastDelta);
+        $result = $this->update($result, $i, strlen($this->password) - 1, $lastDelta);
 
-        return $this->result;
+        return $result;
     }
 
     /**
+     * @param $result
      * @param $i
      * @param $j
      * @param $delta
+     * @return array
      */
-    protected function update($i, $j, $delta)
+    protected function update($result, $i, $j, $delta)
     {
         if ($j - 1 > 1 or ($delta and abs($delta) === 1)) {
             if (0 < abs($delta) and abs($delta) <= self::MAX_DELTA) {
@@ -89,7 +83,7 @@ class SequenceMatch extends AbstractMatch
                     $sequenceSpace = 26;
                 }
 
-                $this->result[] = [
+                $result[] = [
                     'pattern' => 'sequence',
                     'i' => $i,
                     'j' => $j,
@@ -100,5 +94,7 @@ class SequenceMatch extends AbstractMatch
                 ];
             }
         }
+
+        return $result;
     }
 }
