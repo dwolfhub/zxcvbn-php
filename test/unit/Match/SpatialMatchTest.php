@@ -216,11 +216,20 @@ class SpatialMatchTest extends \PHPUnit_Framework_TestCase
             [
                 'pattern' => 'spatial',
                 'i' => 0,
-                'j' => 6,
-                'token' => '0(*&^54',
-                'graph' => 'dvorak',
-                'turns' => 1,
-                'shifted_count' => 4,
+                'j' => 8,
+                'token' => '147852369',
+                'graph' => 'mac_keypad',
+                'turns' => 5,
+                'shifted_count' => 0,
+            ],
+            [
+                'pattern' => 'spatial',
+                'i' => 0,
+                'j' => 8,
+                'token' => '147852369',
+                'graph' => 'keypad',
+                'turns' => 5,
+                'shifted_count' => 0,
             ]
         ], $this->spatialMatch->getMatches());
     }
