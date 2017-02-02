@@ -16,7 +16,7 @@ class SpatialMatch extends AbstractMatch
     {
         $matches = [];
         foreach ($this->graphs as $graphName => $graph) {
-            $matches = $this->helper($graph, $graphName) + $matches;
+            $matches = array_merge($this->helper($graph, $graphName), $matches);
         }
 
         usort($matches, [$this, 'sortByIAndJ']);
