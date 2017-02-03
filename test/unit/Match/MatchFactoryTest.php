@@ -3,6 +3,7 @@
 namespace unit\Match;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 use Zxcvbn\Match\DateMatch;
 use Zxcvbn\Match\DictionaryMatch;
 use Zxcvbn\Match\L33tMatch;
@@ -15,7 +16,7 @@ use Zxcvbn\Match\SequenceMatch;
 use Zxcvbn\Match\SpatialMatch;
 use Zxcvbn\Scoring;
 
-class MatchFactoryTest extends \PHPUnit_Framework_TestCase
+class MatchFactoryTest extends TestCase
 {
     /**
      * @var MatchFactory

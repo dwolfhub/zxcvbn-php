@@ -1,11 +1,11 @@
 <?php
 namespace ZxcvbnPhp\Guess;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Zxcvbn\Guess\BruteForceEstimator;
 use Zxcvbn\Guess\EstimatorFactory;
 
-class EstimatorFactoryTest extends PHPUnit_Framework_TestCase
+class EstimatorFactoryTest extends TestCase
 {
     /**
      * @var EstimatorFactory

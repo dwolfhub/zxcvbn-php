@@ -2,9 +2,10 @@
 
 namespace unit\Guess;
 
+use PHPUnit\Framework\TestCase;
 use Zxcvbn\Guess\DictionaryEstimator;
 
-class DictionaryEstimatorTest extends \PHPUnit_Framework_TestCase
+class DictionaryEstimatorTest extends TestCase
 {
     /**
      * @var DictionaryEstimator

@@ -2,9 +2,10 @@
 
 namespace unit\Match;
 
+use PHPUnit\Framework\TestCase;
 use Zxcvbn\Match\DateMatch;
 
-class DateMatchTest extends \PHPUnit_Framework_TestCase
+class DateMatchTest extends TestCase
 {
     /**
      * @var DateMatch

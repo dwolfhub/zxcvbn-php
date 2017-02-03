@@ -2,7 +2,7 @@
 
 namespace unit\Guess;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Zxcvbn\Guess\BruteForceEstimator;
 use Zxcvbn\Scoring;
 
@@ -10,7 +10,7 @@ use Zxcvbn\Scoring;
  * Class BruteForceEstimatorTest
  * @package unit\Guess
  */
-class BruteForceEstimatorTest extends PHPUnit_Framework_TestCase
+class BruteForceEstimatorTest extends TestCase
 {
     /**
      * @var BruteForceEstimator

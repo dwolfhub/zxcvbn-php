@@ -2,9 +2,10 @@
 
 namespace unit\Match\DataProvider;
 
+use PHPUnit\Framework\TestCase;
 use Zxcvbn\Match\DataProvider\AdjacencyGraphs;
 
-class AdjacencyGraphsTest extends \PHPUnit_Framework_TestCase
+class AdjacencyGraphsTest extends TestCase
 {
     public function testProvidesProperLists()
     {

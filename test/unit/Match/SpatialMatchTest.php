@@ -2,10 +2,11 @@
 
 namespace unit\Match;
 
+use PHPUnit\Framework\TestCase;
 use Zxcvbn\Match\DataProvider\AdjacencyGraphs;
 use Zxcvbn\Match\SpatialMatch;
 
-class SpatialMatchTest extends \PHPUnit_Framework_TestCase
+class SpatialMatchTest extends TestCase
 {
     /**
      * @var SpatialMatch

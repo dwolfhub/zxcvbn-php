@@ -1,10 +1,10 @@
 <?php
 namespace ZxcvbnPhp\test\unit\Guess;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Zxcvbn\Guess\SequenceEstimator;
 
-class SequenceEstimatorTest extends PHPUnit_Framework_TestCase
+class SequenceEstimatorTest extends TestCase
 {
     /**
      * @var SequenceEstimator

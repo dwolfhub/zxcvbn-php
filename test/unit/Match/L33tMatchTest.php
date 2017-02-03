@@ -2,10 +2,11 @@
 
 namespace unit\Match;
 
+use PHPUnit\Framework\TestCase;
 use Zxcvbn\Match\DictionaryMatch;
 use Zxcvbn\Match\L33tMatch;
 
-class L33tMatchTest extends \PHPUnit_Framework_TestCase
+class L33tMatchTest extends TestCase
 {
     /**
      * @var L33tMatch

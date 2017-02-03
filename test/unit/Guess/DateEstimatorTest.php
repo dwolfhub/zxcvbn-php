@@ -2,9 +2,10 @@
 
 namespace unit\Guess;
 
+use PHPUnit\Framework\TestCase;
 use Zxcvbn\Guess\DateEstimator;
 
-class DateEstimatorTest extends \PHPUnit_Framework_TestCase
+class DateEstimatorTest extends TestCase
 {
     /**
      * @var DateEstimator

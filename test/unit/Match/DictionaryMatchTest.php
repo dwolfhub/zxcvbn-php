@@ -2,9 +2,10 @@
 
 namespace unit\Match;
 
+use PHPUnit\Framework\TestCase;
 use Zxcvbn\Match\DictionaryMatch;
 
-class DictionaryMatchTest extends \PHPUnit_Framework_TestCase
+class DictionaryMatchTest extends TestCase
 {
     /**
      * @var DictionaryMatch

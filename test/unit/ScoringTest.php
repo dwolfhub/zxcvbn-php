@@ -2,11 +2,12 @@
 
 namespace unit;
 
+use PHPUnit\Framework\TestCase;
 use Zxcvbn\Guess\AbstractEstimator;
 use Zxcvbn\Guess\EstimatorFactory;
 use Zxcvbn\Scoring;
 
-class ScoringTest extends \PHPUnit_Framework_TestCase
+class ScoringTest extends TestCase
 {
     /**
      * @var Scoring

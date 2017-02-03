@@ -2,13 +2,14 @@
 
 namespace unit;
 
+use PHPUnit\Framework\TestCase;
 use Zxcvbn\Feedback;
 use Zxcvbn\Match\AbstractMatch;
 use Zxcvbn\Scoring;
 use Zxcvbn\TimeEstimates;
 use Zxcvbn\Zxcvbn;
 
-class ZxcvbnTest extends \PHPUnit_Framework_TestCase
+class ZxcvbnTest extends TestCase
 {
     /**
      * @var Zxcvbn

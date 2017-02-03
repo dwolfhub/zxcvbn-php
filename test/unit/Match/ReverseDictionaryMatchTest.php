@@ -2,10 +2,11 @@
 
 namespace unit\Match;
 
+use PHPUnit\Framework\TestCase;
 use Zxcvbn\Match\DictionaryMatch;
 use Zxcvbn\Match\ReverseDictionaryMatch;
 
-class ReverseDictionaryMatchTest extends \PHPUnit_Framework_TestCase
+class ReverseDictionaryMatchTest extends TestCase
 {
     /**
      * @var ReverseDictionaryMatch

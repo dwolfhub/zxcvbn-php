@@ -1,7 +1,9 @@
 <?php
 namespace Zxcvbn;
 
-class MatchingTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class MatchingTest extends TestCase
 {
     // @todo
     public function testMatchingUtils()

@@ -2,9 +2,10 @@
 
 namespace unit\Match;
 
+use PHPUnit\Framework\TestCase;
 use Zxcvbn\Match\RegexMatch;
 
-class RegexMatchTest extends \PHPUnit_Framework_TestCase
+class RegexMatchTest extends TestCase
 {
     /**
      * @var RegexMatch

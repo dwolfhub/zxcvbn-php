@@ -2,9 +2,10 @@
 
 namespace unit\Match\DataProvider;
 
+use PHPUnit\Framework\TestCase;
 use Zxcvbn\Match\DataProvider\FrequencyLists;
 
-class FrequencyListsTest extends \PHPUnit_Framework_TestCase
+class FrequencyListsTest extends TestCase
 {
     public function testProvidesProperLists()
     {

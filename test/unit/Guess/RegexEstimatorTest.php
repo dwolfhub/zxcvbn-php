@@ -1,10 +1,10 @@
 <?php
 namespace ZxcvbnPhp\test\unit\Guess;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Zxcvbn\Guess\RegexEstimator;
 
-class RegexEstimatorTest extends PHPUnit_Framework_TestCase
+class RegexEstimatorTest extends TestCase
 {
     /**
      * @var RegexEstimator

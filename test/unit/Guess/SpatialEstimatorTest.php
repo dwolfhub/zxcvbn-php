@@ -1,10 +1,10 @@
 <?php
 namespace ZxcvbnPhp\test\unit\Guess;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Zxcvbn\Guess\SpatialEstimator;
 
-class SpatialEstimatorTest extends PHPUnit_Framework_TestCase
+class SpatialEstimatorTest extends TestCase
 {
     /**
      * @var SpatialEstimator

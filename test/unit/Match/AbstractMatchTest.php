@@ -1,11 +1,11 @@
 <?php
 namespace ZxcvbnPhp\Match;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Zxcvbn\Match\AbstractMatch;
 use Zxcvbn\Match\DateMatch;
 
-class AbstractMatchTest extends PHPUnit_Framework_TestCase
+class AbstractMatchTest extends TestCase
 {
     public function testSetRankedDictionaries()
     {

@@ -2,11 +2,12 @@
 
 namespace unit\Match;
 
+use PHPUnit\Framework\TestCase;
 use Zxcvbn\Match\AbstractMatch;
 use Zxcvbn\Match\RepeatMatch;
 use Zxcvbn\Scoring;
 
-class RepeatMatchTest extends \PHPUnit_Framework_TestCase
+class RepeatMatchTest extends TestCase
 {
     /**
      * @var RepeatMatch

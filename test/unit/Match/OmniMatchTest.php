@@ -2,9 +2,10 @@
 
 namespace unit\Match;
 
+use PHPUnit\Framework\TestCase;
 use Zxcvbn\Match\OmniMatch;
 
-class OmniMatchTest extends \PHPUnit_Framework_TestCase
+class OmniMatchTest extends TestCase
 {
     /**
      * @var OmniMatch

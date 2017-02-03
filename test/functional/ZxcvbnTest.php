@@ -2,10 +2,10 @@
 
 namespace functional;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Zxcvbn\Zxcvbn;
 
-class ZxcvbnTest extends PHPUnit_Framework_TestCase
+class ZxcvbnTest extends TestCase
 {
     public function testIsTesting()
     {

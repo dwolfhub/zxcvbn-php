@@ -2,10 +2,10 @@
 
 namespace unit;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Zxcvbn\Feedback;
 
-class FeedbackTest extends PHPUnit_Framework_TestCase
+class FeedbackTest extends TestCase
 {
     /**
      * @var Feedback

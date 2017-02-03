@@ -2,9 +2,10 @@
 
 namespace unit\Match;
 
+use PHPUnit\Framework\TestCase;
 use Zxcvbn\Match\SequenceMatch;
 
-class SequenceMatchTest extends \PHPUnit_Framework_TestCase
+class SequenceMatchTest extends TestCase
 {
     /**
      * @var SequenceMatch

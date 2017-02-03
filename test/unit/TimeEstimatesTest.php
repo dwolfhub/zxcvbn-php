@@ -2,10 +2,10 @@
 
 namespace unit;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Zxcvbn\TimeEstimates;
 
-class TimeEstimatesTest extends PHPUnit_Framework_TestCase
+class TimeEstimatesTest extends TestCase
 {
     /**
      * @var TimeEstimates
