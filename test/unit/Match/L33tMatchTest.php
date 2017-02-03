@@ -81,4 +81,17 @@ class L33tMatchTest extends \PHPUnit_Framework_TestCase
         ], $this->l33tMatch->getMatches());
     }
 
+    public function testNoL33tTable()
+    {
+        $this->l33tMatch->setL33tTable([]);
+        $this->l33tMatch->setPassword('password');
+        $this->assertEquals([], $this->l33tMatch->getMatches());
+    }
+
+    public function testDoesNotReturnMatchForDictionaryMatches()
+    {
+        $this->l33tMatch->setPassword('password');
+        $this->assertEquals([], $this->l33tMatch->getMatches());
+    }
+
 }
