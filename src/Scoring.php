@@ -55,6 +55,24 @@ class Scoring
     {
         $n = strlen($password);
 
+        $matchesByJ = array_fill(0, $n, []);
+        foreach ($matches as $m) {
+            array_push($matchesByJ[$m['j']], $m);
+        }
+
+        // small detail: for deterministic output, sort each sublist by i.
+        for ($i = 0; $i < count($matchesByJ); $i++) {
+            usort($matchesByJ[$i], function ($a, $b) {
+                if ($a['i'] < $b['i']) {
+                    return -1;
+                } else if ($a['i'] === $b['i']) {
+                    return 0;
+                } else {
+                    return 1;
+                }
+            });
+        }
+
         $optimal = [
             // optimal.m[k][l] holds final match in the best length-l match sequence
             // covering the password prefix up to k, inclusive.
@@ -69,23 +87,6 @@ class Scoring
             // same structure as optimal.m -- holds the overall metric.
             'g' => array_fill(0, $n, []),
         ];
-
-        $matchesByJ = array_fill(0, $n, []);
-        foreach ($matches as $m) {
-            array_push($matchesByJ[$m['j']], $m);
-        }
-
-        for ($i = 0; $i < count($matchesByJ); $i++) {
-            usort($matchesByJ[$i], function ($a, $b) {
-                if ($a['i'] < $b['i']) {
-                    return -1;
-                } else if ($a['i'] === $b['i']) {
-                    return 0;
-                } else {
-                    return 1;
-                }
-            });
-        }
 
         for ($k = 0; $k < $n; $k++) {
             foreach ($matchesByJ[$k] as $m) {
@@ -178,8 +179,9 @@ class Scoring
         }
 
         $minGuesses = 1;
-        if (strlen($match['token']) < strlen($password)) {
-            if (strlen($match['token']) === 1) {
+        $strlenToken = strlen($match['token']);
+        if ($strlenToken < strlen($password)) {
+            if ($strlenToken === 1) {
                 $minGuesses = self::MIN_SUBMATCH_GUESSES_SINGLE_CHAR;
             } else {
                 $minGuesses = self::MIN_SUBMATCH_GUESSES_MULTI_CHAR;
@@ -217,7 +219,7 @@ class Scoring
         if ($number < 2) {
             return 1;
         } else {
-            return ($number * factorial($number - 1));
+            return $number * $this->factorial($number - 1);
         }
     }
 
@@ -239,6 +241,7 @@ class Scoring
             // generate k bruteforce matches, spanning from (i=1, j=k) up to
             // (i=k, j=k). see if adding these new matches to any of the
             // sequences in optimal[i-1] leads to new bests.
+            $m = $this->makeBruteforceMatch($password, $i, $k);
             foreach ($optimal['m'][$i - 1] as $l => $lastM) {
                 $l = (int)$l;
 

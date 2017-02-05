@@ -1,6 +1,6 @@
 <?php
 
-namespace unit\Guess;
+namespace test\Guess;
 
 use PHPUnit\Framework\TestCase;
 use Zxcvbn\Guess\BruteForceEstimator;

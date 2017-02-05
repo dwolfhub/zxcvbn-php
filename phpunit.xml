@@ -10,14 +10,8 @@
          bootstrap="./vendor/autoload.php">
 
     <testsuites>
-        <testsuite name="zxcvbn-ported">
-            <directory>./test/ported</directory>
-        </testsuite>
-        <testsuite name="zxcvbn-functional">
-            <directory>./test/functional</directory>
-        </testsuite>
-        <testsuite name="zxcvbn-unit">
-            <directory>./test/unit</directory>
+        <testsuite name="tests">
+            <directory>./test</directory>
         </testsuite>
     </testsuites>
 

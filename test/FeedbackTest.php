@@ -1,6 +1,6 @@
 <?php
 
-namespace unit;
+namespace test;
 
 use PHPUnit\Framework\TestCase;
 use Zxcvbn\Feedback;

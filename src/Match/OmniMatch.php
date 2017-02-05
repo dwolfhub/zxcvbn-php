@@ -28,7 +28,7 @@ class OmniMatch extends AbstractMatch
 
         $results = [];
         foreach ($matches as $match) {
-            $results = $match->getMatches() + $results;
+            $results = array_merge($results, $match->getMatches());
         }
 
         usort($results, [$this, 'sortByIAndJ']);

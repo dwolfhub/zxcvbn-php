@@ -1,0 +1,205 @@
+<?php
+
+namespace test;
+
+use PHPUnit\Framework\TestCase;
+use Zxcvbn\Guess\AbstractEstimator;
+use Zxcvbn\Guess\EstimatorFactory;
+use Zxcvbn\Scoring;
+
+class ScoringTest extends TestCase
+{
+    /**
+     * @var Scoring
+     */
+    protected $scoring;
+
+    public function testMostGuessableMatchSequence()
+    {
+        $this->setUpUnitTest();
+        $this->assertEquals([
+            'password' => 'password',
+            'guesses' => 1001.0,
+            'guesses_log10' => 3.0004340774793188,
+            'sequence' => [
+                [
+                    'pattern' => 'bruteforce',
+                    'token' => 'password',
+                    'i' => 0,
+                    'j' => 7,
+                    'guesses' => 1000.0,
+                    'guesses_log10' => 3.0,
+                ],
+            ],
+        ], $this->scoring->mostGuessableMatchSequence('password', []));
+    }
+
+    public function testMostGuessableMatchSequenceExcludeAdditive()
+    {
+        $this->setUpUnitTest();
+        $this->assertEquals([
+            'password' => 'password',
+            'guesses' => 1000.0,
+            'guesses_log10' => 3.0,
+            'sequence' => [
+                [
+                    'pattern' => 'bruteforce',
+                    'token' => 'password',
+                    'i' => 0,
+                    'j' => 7,
+                    'guesses' => 1000.0,
+                    'guesses_log10' => 3.0,
+                ],
+            ],
+        ], $this->scoring->mostGuessableMatchSequence('password', [], 1));
+    }
+
+    /**
+     * Integration Testing
+     * Some of these tests have been ported from the js and python
+     * libraries to ensure consistency
+     */
+
+    public function testReturnsOneBruteForceMatchGivenAnEmptyMatchSequence()
+    {
+        $scoring = new Scoring(new EstimatorFactory());
+        $password = '0123456789';
+
+        $result = $scoring->mostGuessableMatchSequence($password, []);
+
+        $this->assertCount(1, $result['sequence']);
+
+        $sequence = $result['sequence'][0];
+
+        $this->assertEquals('bruteforce', $sequence['pattern']);
+        $this->assertEquals($password, $sequence['token']);
+        $this->assertEquals(0, $sequence['i']);
+        $this->assertEquals(9, $sequence['j']);
+    }
+
+    public function testReturnsMatchPlusBruteForceWhenMatchCoversAPrefixOfPassword()
+    {
+        $scoring = new Scoring(new EstimatorFactory());
+        $password = '0123456789';
+
+        $match = $this->getMockMatchArray(0, 5, 1);
+        $matches = [$match];
+
+        $result = $scoring->mostGuessableMatchSequence($password, $matches, true);
+
+        $this->assertCount(2, $result['sequence']);
+        $this->assertEquals($match, $result['sequence'][0]);
+
+        $bruteForceMatch = $result['sequence'][1];
+
+        $this->assertEquals('bruteforce', $bruteForceMatch['pattern']);
+        $this->assertEquals(6, $bruteForceMatch['i']);
+        $this->assertEquals(9, $bruteForceMatch['j']);
+    }
+
+    public function testReturnsBruteForcePlusMatchWhenMatchCoversASuffix()
+    {
+        $scoring = new Scoring(new EstimatorFactory());
+        $password = '0123456789';
+
+        $match = $this->getMockMatchArray(3, 9, 1);
+        $matches = [$match];
+        $result = $scoring->mostGuessableMatchSequence($password, $matches, true);
+
+        $this->assertCount(2, $result['sequence']);
+        $bruteForceMatch = $result['sequence'][0];
+        $this->assertEquals('bruteforce', $bruteForceMatch['pattern']);
+        $this->assertEquals(0, $bruteForceMatch['i']);
+        $this->assertEquals(2, $bruteForceMatch['j']);
+
+        $this->assertEquals($match, $result['sequence'][1]);
+    }
+
+    public function testChoosesLowerGuessesMatchGivenTwoMatchesOfTheSameSpan()
+    {
+        $scoring = new Scoring(new EstimatorFactory());
+        $password = '0123456789';
+
+        $match0 = $this->getMockMatchArray(0, 9, 1);
+        $match1 = $this->getMockMatchArray(0, 9, 2);
+        $matches = [$match0, $match1];
+
+        $result = $scoring->mostGuessableMatchSequence($password, $matches, true);
+
+        $this->assertCount(1, $result['sequence']);
+        $this->assertEquals($match0, $result['sequence'][0]);
+
+        $match0['guesses'] = 3;
+        $matches[0] = $match0;
+        $this->assertEquals(3, $matches[0]['guesses']);
+
+        $result = $scoring->mostGuessableMatchSequence($password, $matches, true);
+        $this->assertCount(1, $result['sequence']);
+        $this->assertEquals($match1, $result['sequence'][0]);
+    }
+
+    public function testWhenMatch0CoversMatch1And2ChooseMatch()
+    {
+        $scoring = new Scoring(new EstimatorFactory());
+        $password = '0123456789';
+
+        $match0 = $this->getMockMatchArray(0, 9, 3);
+        $match1 = $this->getMockMatchArray(0, 3, 2);
+        $match2 = $this->getMockMatchArray(4, 9, 1);
+        $matches = [$match0, $match1, $match2];
+
+        $result = $scoring->mostGuessableMatchSequence($password, $matches, true);
+
+        $this->assertEquals(3, $result['guesses']);
+        $this->assertEquals([$match0], $result['sequence']);
+
+        $match0['guesses'] = 5;
+        $matches[0] = $match0;
+
+        $result = $scoring->mostGuessableMatchSequence($password, $matches, true);
+
+        $this->assertEquals(4, $result['guesses']);
+        $this->assertEquals([$match1, $match2], $result['sequence']);
+    }
+
+    
+
+    protected function setUpUnitTest()
+    {
+        $mockEstimator = $this->getMockBuilder(
+            AbstractEstimator::class
+        )
+            ->setMethods(['estimate'])
+            ->getMock();
+        $mockEstimator->expects($this->atLeastOnce())
+            ->method('estimate')
+            ->willReturn(1e3);
+
+        $mockEstimatorFactory = $this->getMockBuilder(
+            EstimatorFactory::class
+        )
+            ->setMethods(['create'])
+            ->getMock();
+        $mockEstimatorFactory->expects($this->atLeastOnce())
+            ->method('create')
+            ->willReturn($mockEstimator);
+
+        $this->scoring = new Scoring($mockEstimatorFactory);
+    }
+
+    /**
+     * @param int $i
+     * @param int $j
+     * @param int $guesses
+     * @return array
+     */
+    protected function getMockMatchArray($i, $j, $guesses)
+    {
+        return [
+            'i' => $i,
+            'j' => $j,
+            'guesses' => $guesses,
+        ];
+    }
+
+}

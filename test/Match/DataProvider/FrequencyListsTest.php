@@ -1,6 +1,6 @@
 <?php
 
-namespace unit\Match\DataProvider;
+namespace test\Match\DataProvider;
 
 use PHPUnit\Framework\TestCase;
 use Zxcvbn\Match\DataProvider\FrequencyLists;
