@@ -1,5 +1,5 @@
 <?php
-namespace ZxcvbnPhp\test\unit\Guess;
+namespace ZxcvbnPhp\test\functional\Guess;
 
 use PHPUnit\Framework\TestCase;
 use Zxcvbn\Guess\EstimatorFactory;
@@ -18,20 +18,6 @@ class RepeatEstimatorTest extends TestCase
     {
         $this->repeatEstimator = new RepeatEstimator();
     }
-
-    public function testMultipliesBaseGuessesAndRepeatCount()
-    {
-        $this->assertEquals(24, $this->repeatEstimator->estimate([
-            'base_guesses' => 12,
-            'repeat_count' => 2,
-        ]));
-    }
-
-    /**
-     * Integration Testing
-     * Some of these tests have been ported from the js and python
-     * libraries to ensure consistency
-     */
 
     /**
      * @param $token
@@ -71,7 +57,8 @@ class RepeatEstimatorTest extends TestCase
             ['999', '9', 3],
             ['$$$$', '$', 4],
             ['abab', 'ab', 2],
-            ['batterystaplebatterystaplebatterystaple', 'batterystaple', 3]
+            ['batterystaplebatterystaplebatterystaple', 'batterystaple', 3],
         ];
     }
+
 }

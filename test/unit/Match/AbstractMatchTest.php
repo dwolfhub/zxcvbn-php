@@ -1,5 +1,5 @@
 <?php
-namespace test\Match;
+namespace unit\test\Match;
 
 use PHPUnit\Framework\TestCase;
 use Zxcvbn\Match\AbstractMatch;

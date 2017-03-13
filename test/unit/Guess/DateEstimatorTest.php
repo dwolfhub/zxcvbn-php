@@ -1,6 +1,6 @@
 <?php
 
-namespace test\Guess;
+namespace unit\test\Guess;
 
 use PHPUnit\Framework\TestCase;
 use Zxcvbn\Guess\AbstractEstimator;
