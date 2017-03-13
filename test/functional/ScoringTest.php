@@ -1,6 +1,5 @@
 <?php
-
-namespace test;
+namespace ZxcvbnPhp\test\functional;
 
 use PHPUnit\Framework\TestCase;
 use Zxcvbn\Guess\AbstractEstimator;
@@ -9,57 +8,6 @@ use Zxcvbn\Scoring;
 
 class ScoringTest extends TestCase
 {
-    /**
-     * @var Scoring
-     */
-    protected $scoring;
-
-    public function testMostGuessableMatchSequence()
-    {
-        $this->setUpUnitTest();
-        $this->assertEquals([
-            'password' => 'password',
-            'guesses' => 1001.0,
-            'guesses_log10' => 3.0004340774793188,
-            'sequence' => [
-                [
-                    'pattern' => 'bruteforce',
-                    'token' => 'password',
-                    'i' => 0,
-                    'j' => 7,
-                    'guesses' => 1000.0,
-                    'guesses_log10' => 3.0,
-                ],
-            ],
-        ], $this->scoring->mostGuessableMatchSequence('password', []));
-    }
-
-    public function testMostGuessableMatchSequenceExcludeAdditive()
-    {
-        $this->setUpUnitTest();
-        $this->assertEquals([
-            'password' => 'password',
-            'guesses' => 1000.0,
-            'guesses_log10' => 3.0,
-            'sequence' => [
-                [
-                    'pattern' => 'bruteforce',
-                    'token' => 'password',
-                    'i' => 0,
-                    'j' => 7,
-                    'guesses' => 1000.0,
-                    'guesses_log10' => 3.0,
-                ],
-            ],
-        ], $this->scoring->mostGuessableMatchSequence('password', [], 1));
-    }
-
-    /**
-     * Integration Testing
-     * Some of these tests have been ported from the js and python
-     * libraries to ensure consistency
-     */
-
     public function testReturnsOneBruteForceMatchGivenAnEmptyMatchSequence()
     {
         $scoring = new Scoring(new EstimatorFactory());
@@ -162,7 +110,7 @@ class ScoringTest extends TestCase
         $this->assertEquals([$match1, $match2], $result['sequence']);
     }
 
-    
+
 
     protected function setUpUnitTest()
     {
@@ -201,5 +149,4 @@ class ScoringTest extends TestCase
             'guesses' => $guesses,
         ];
     }
-
 }

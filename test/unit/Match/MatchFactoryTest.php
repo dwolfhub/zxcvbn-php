@@ -1,6 +1,6 @@
 <?php
 
-namespace test\Match;
+namespace unit\test\Match;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
