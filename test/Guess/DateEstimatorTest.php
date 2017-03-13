@@ -3,7 +3,9 @@
 namespace test\Guess;
 
 use PHPUnit\Framework\TestCase;
+use Zxcvbn\Guess\AbstractEstimator;
 use Zxcvbn\Guess\DateEstimator;
+use Zxcvbn\Scoring;
 
 class DateEstimatorTest extends TestCase
 {
@@ -39,5 +41,43 @@ class DateEstimatorTest extends TestCase
             'year' => 1984,
             'separator' => true,
         ]));
+    }
+
+    /**
+     * Integration Testing
+     * Some of these tests have been ported from the js and python
+     * libraries to ensure consistency
+     */
+
+    public function testGuessesAre365TimesDistanceFromRefYear()
+    {
+        $match = [
+            'token' => '1123',
+            'separator' => '',
+            'has_full_year' => false,
+            'year' => 1923,
+            'month' => 1,
+            'day' => 1,
+        ];
+        $this->assertEquals(
+            365 * abs(Scoring::REFERENCE_YEAR - $match['year']),
+            $this->dateEstimator->estimate($match)
+        );
+    }
+
+    public function testRecentYearsAssumeMinYearSpaceAndExtraGuessesAreAddedForSeparators()
+    {
+        $match = [
+            'token' => '1/1/2010',
+            'separator' => '/',
+            'has_full_year' => true,
+            'year' => 2010,
+            'month' => 1,
+            'day' => 1,
+        ];
+        $this->assertEquals(
+            365 * AbstractEstimator::MIN_YEAR_SPACE * 4,
+            $this->dateEstimator->estimate($match)
+        );
     }
 }

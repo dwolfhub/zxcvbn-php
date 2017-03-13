@@ -3,6 +3,8 @@ namespace ZxcvbnPhp\test\unit\Guess;
 
 use PHPUnit\Framework\TestCase;
 use Zxcvbn\Guess\SpatialEstimator;
+use Zxcvbn\Match\DataProvider\AdjacencyGraphs;
+use Zxcvbn\Scoring;
 
 class SpatialEstimatorTest extends TestCase
 {
@@ -50,5 +52,24 @@ class SpatialEstimatorTest extends TestCase
             'token' => '456123',
             'shifted_count' => 1,
         ]));
+    }
+
+    /**
+     * Integration Testing
+     * Some of these tests have been ported from the js and python
+     * libraries to ensure consistency
+     */
+
+    public function testWithNoTurnsOrShiftsGuessesIsStartsTimesDegreeTimesCountMinus1()
+    {
+        $match = [
+            'token' => 'zxcvbn',
+            'graph' => 'qwerty',
+            'turns' => 1,
+            'shifted_count' => 0,
+        ];
+        $keyboardStartingPositions = count(array_keys(AdjacencyGraphs::getData()['qwerty']));
+        $keyboardStartingPositions = count(array_keys(AdjacencyGraphs::getData()['qwerty']));
+        $baseGuesses = $keyboardStartingPositions * ke
     }
 }

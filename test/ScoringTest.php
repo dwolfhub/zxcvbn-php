@@ -3,7 +3,9 @@
 namespace test;
 
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Zxcvbn\Guess\AbstractEstimator;
+use Zxcvbn\Guess\DateEstimator;
 use Zxcvbn\Guess\EstimatorFactory;
 use Zxcvbn\Scoring;
 
@@ -162,7 +164,39 @@ class ScoringTest extends TestCase
         $this->assertEquals([$match1, $match2], $result['sequence']);
     }
 
-    
+    public function testEstimateGuessesReturnsCachedGuessesWhenAvailable()
+    {
+        $match = ['guesses' => 1];
+        $password = 'testpassword';
+
+        $estimateGuessesMethod = $this->getEstimateGuessesReflectionMethod();
+
+        $scoring = new Scoring(new EstimatorFactory());
+
+        $this->assertEquals(1, $estimateGuessesMethod->invokeArgs($scoring, [$password, &$match]));
+    }
+
+    public function testEstimateGuessesDelegatesBasedOnPattern()
+    {
+        $estimatorFactory = new EstimatorFactory();
+        $scoring = new Scoring($estimatorFactory);
+        $dateEstimator = $estimatorFactory->create(EstimatorFactory::TYPE_DATE);
+
+        $estimateGuessesMethod = $this->getEstimateGuessesReflectionMethod();
+
+        $password = 'testpassword';
+        $match = [
+            'pattern' => 'date',
+            'token' => '1977',
+            'year' => 1977,
+            'month' => 7,
+            'day' => 14,
+        ];
+        $this->assertEquals(
+            $dateEstimator->estimate($match),
+            $estimateGuessesMethod->invokeArgs($scoring, [$password, &$match])
+        );
+    }
 
     protected function setUpUnitTest()
     {
@@ -200,6 +234,17 @@ class ScoringTest extends TestCase
             'j' => $j,
             'guesses' => $guesses,
         ];
+    }
+
+    /**
+     * @return \ReflectionMethod
+     */
+    protected function getEstimateGuessesReflectionMethod()
+    {
+        $scoringReflection = new ReflectionClass('Zxcvbn\Scoring');
+        $method = $scoringReflection->getMethod('estimateGuesses');
+        $method->setAccessible(true);
+        return $method;
     }
 
 }
