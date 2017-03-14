@@ -170,6 +170,24 @@ class DictionaryEstimatorTest extends TestCase
         ];
     }
 
+    public function testCapitalizationDoesntEffectL33tGuesses()
+    {
+        $dictionaryEstimator = new DictionaryEstimator();
+        $reflectionDictionaryEstimator = new \ReflectionClass(DictionaryEstimator::class);
+        $l33tVariations = $reflectionDictionaryEstimator->getMethod('l33tVariations');
+        $l33tVariations->setAccessible(true);
+
+        $nCKMethod = $this->getNCKMethod();
+        $match = [
+            'token' => 'Aa44aA',
+            'l33t' => true,
+            'sub' => ['4' => 'a'],
+        ];
+        $variants = $nCKMethod->invokeArgs($dictionaryEstimator, [6, 2]) + $nCKMethod->invokeArgs($dictionaryEstimator, [6, 1]);
+        $msg = 'capitalization does not affect extra l33t guesses calc';
+        $this->assertEquals($variants, $l33tVariations->invokeArgs($dictionaryEstimator, [$match]), $msg);
+    }
+
     /**
      * @return ReflectionMethod
      */
