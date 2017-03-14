@@ -189,20 +189,21 @@ class Scoring
         }
 
         $estimationFunctions = [
-            'bruteforce' => $this->estimatorFactory->create(EstimatorFactory::TYPE_BRUTE_FORCE),
-            'dictionary' => $this->estimatorFactory->create(EstimatorFactory::TYPE_DICTIONARY),
-            'spatial' => $this->estimatorFactory->create(EstimatorFactory::TYPE_SPATIAL),
-            'repeat' => $this->estimatorFactory->create(EstimatorFactory::TYPE_REPEAT),
-            'sequence' => $this->estimatorFactory->create(EstimatorFactory::TYPE_SEQUENCE),
-            'regex' => $this->estimatorFactory->create(EstimatorFactory::TYPE_REGEX),
-            'date' => $this->estimatorFactory->create(EstimatorFactory::TYPE_DATE),
+            'bruteforce' => EstimatorFactory::TYPE_BRUTE_FORCE,
+            'dictionary' => EstimatorFactory::TYPE_DICTIONARY,
+            'spatial' => EstimatorFactory::TYPE_SPATIAL,
+            'repeat' => EstimatorFactory::TYPE_REPEAT,
+            'sequence' => EstimatorFactory::TYPE_SEQUENCE,
+            'regex' => EstimatorFactory::TYPE_REGEX,
+            'date' => EstimatorFactory::TYPE_DATE,
         ];
 
         if (empty($estimationFunctions[$match['pattern']])) {
             throw new InvalidArgumentException(sprintf('Match pattern %s is invalid.', $match['pattern']));
         }
 
-        $guesses = $estimationFunctions[$match['pattern']]->estimate($match);
+        $estimationFunction = $this->estimatorFactory->create($estimationFunctions[$match['pattern']]);
+        $guesses = $estimationFunction->estimate($match);
 
         $match['guesses'] = max($guesses, $minGuesses);
         $match['guesses_log10'] = log($match['guesses'], 10);

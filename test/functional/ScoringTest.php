@@ -1,7 +1,8 @@
 <?php
-namespace ZxcvbnPhp\test\functional;
+namespace test\functional;
 
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Zxcvbn\Guess\AbstractEstimator;
 use Zxcvbn\Guess\EstimatorFactory;
 use Zxcvbn\Scoring;
@@ -110,7 +111,34 @@ class ScoringTest extends TestCase
         $this->assertEquals([$match1, $match2], $result['sequence']);
     }
 
+    public function testEstimateGuesses()
+    {
+        $class = new ReflectionClass(Scoring::class);
+        $method = $class->getMethod('estimateGuesses');
+        $method->setAccessible(true);
 
+        $scoring = new Scoring(new EstimatorFactory());
+
+        $match = [
+            'guesses' => 1,
+        ];
+        $guesses = $method->invokeArgs($scoring, ['mockPassword', &$match]);
+        $msg = 'estimate_guesses returns cached guesses when available';
+        $this->assertEquals(1, $guesses, $msg);
+
+        $estimatorFactory = new EstimatorFactory();
+        $dateEstimator = $estimatorFactory->create(EstimatorFactory::TYPE_DATE);
+        $msg = 'estimate_guesses delegates based on pattern';
+        $match = [
+            'pattern' => 'date',
+            'token' => '1977',
+            'year' => 1977,
+            'month' => 7,
+            'day' => 14,
+        ];
+        $guesses = $method->invokeArgs($scoring, ['mockPassword', &$match]);
+        $this->assertEquals($dateEstimator->estimate($match), $guesses, $msg);
+    }
 
     protected function setUpUnitTest()
     {
