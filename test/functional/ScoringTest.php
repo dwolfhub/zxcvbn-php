@@ -4,6 +4,7 @@ namespace test\functional;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Zxcvbn\Guess\AbstractEstimator;
+use Zxcvbn\Guess\DateEstimator;
 use Zxcvbn\Guess\EstimatorFactory;
 use Zxcvbn\Scoring;
 
@@ -177,4 +178,16 @@ class ScoringTest extends TestCase
             'guesses' => $guesses,
         ];
     }
+
+    /**
+     * @return \ReflectionMethod
+     */
+    protected function getEstimateGuessesReflectionMethod()
+    {
+        $scoringReflection = new ReflectionClass('Zxcvbn\Scoring');
+        $method = $scoringReflection->getMethod('estimateGuesses');
+        $method->setAccessible(true);
+        return $method;
+    }
+
 }
