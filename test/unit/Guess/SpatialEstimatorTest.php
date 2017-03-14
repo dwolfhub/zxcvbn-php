@@ -53,23 +53,4 @@ class SpatialEstimatorTest extends TestCase
             'shifted_count' => 1,
         ]));
     }
-
-    /**
-     * Integration Testing
-     * Some of these tests have been ported from the js and python
-     * libraries to ensure consistency
-     */
-
-    public function testWithNoTurnsOrShiftsGuessesIsStartsTimesDegreeTimesCountMinus1()
-    {
-        $match = [
-            'token' => 'zxcvbn',
-            'graph' => 'qwerty',
-            'turns' => 1,
-            'shifted_count' => 0,
-        ];
-        $keyboardStartingPositions = count(array_keys(AdjacencyGraphs::getData()['qwerty']));
-        $keyboardStartingPositions = count(array_keys(AdjacencyGraphs::getData()['qwerty']));
-//        $baseGuesses = $keyboardStartingPositions * ke
-    }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace ZxcvbnPhp\test\functional\Guess;
+namespace test\functional\Guess;
 
 use PHPUnit\Framework\TestCase;
 use Zxcvbn\Guess\AbstractEstimator;
