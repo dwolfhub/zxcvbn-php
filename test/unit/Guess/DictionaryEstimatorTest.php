@@ -51,7 +51,7 @@ class DictionaryEstimatorTest extends TestCase
 
     public function testUppercaseVariationsNoRegexMatches()
     {
-        $this->assertEquals(37, $this->instance->estimate([
+        $this->assertEquals(36, $this->instance->estimate([
             'rank' => 1,
             'token' => 'pAssWord',
         ]));

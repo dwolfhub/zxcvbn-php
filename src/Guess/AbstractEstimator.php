@@ -33,7 +33,7 @@ abstract class AbstractEstimator implements EstimatorInterface
         }
 
         $r = 1;
-        for ($d = 1; $d < $k + 1; $d++) {
+        for ($d = 1; $d <= $k; $d++) {
             $r *= $n;
             $r /= $d;
             $n -= 1;

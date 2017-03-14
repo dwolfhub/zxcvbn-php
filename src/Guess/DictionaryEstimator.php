@@ -52,21 +52,21 @@ class DictionaryEstimator extends AbstractEstimator
     {
         $word = $match['token'];
 
-        if (preg_match(self::ALL_LOWER, $word) or strtolower($word) == $word) {
+        if (preg_match(self::ALL_LOWER, $word) === 1 or strtolower($word) == $word) {
             return 1;
         }
 
         foreach ([self::START_UPPER, self::END_UPPER, self::ALL_UPPER] as $regex) {
-            if (preg_match($regex, $word)) {
+            if (preg_match($regex, $word) === 1) {
                 return 2;
             }
         }
 
-        $u = strlen(preg_replace('![^A-Z]+!', '', $word));
-        $l = strlen(preg_replace('![^a-z]+!', '', $word));
-        $variations = 0;
+        $u = strlen(preg_replace('/[^A-Z]/', '', $word));
+        $l = strlen(preg_replace('/[^a-z]/', '', $word));
 
-        for ($i = 0; $i <= min($u, $l); $i++) {
+        $variations = 0;
+        for ($i = 1; $i <= min($u, $l); $i++) {
             $variations += $this->nCK($u + $l, $i);
         }
 
@@ -90,14 +90,14 @@ class DictionaryEstimator extends AbstractEstimator
             // affect l33t calc.
             $chrs = str_split(strtolower($match['token']));
             $s = array_reduce($chrs, function ($carry, $item) use ($subbed) {
-                if ($item === $subbed) {
+                if ($item === (string) $subbed) {
                     $carry++;
                 }
 
                 return $carry;
             }, 0);
             $u = array_reduce($chrs, function ($carry, $item) use ($unsubbed) {
-                if ($item === $unsubbed) {
+                if ($item === (string) $unsubbed) {
                     $carry++;
                 }
 

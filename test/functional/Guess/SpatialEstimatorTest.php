@@ -3,6 +3,7 @@
 namespace test\functional\Guess;
 
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Zxcvbn\Guess\SpatialEstimator;
 use Zxcvbn\Match\DataProvider\AdjacencyGraphs;
 
@@ -35,7 +36,7 @@ class SpatialEstimatorTest extends TestCase
         $msg = 'with no turns or shifts, guesses is starts * degree * (len-1)';
         $this->assertEquals($baseGuesses, $spatialEstimator->estimate($match), $msg);
 
-        $reflectedSpatialEstimator = new \ReflectionClass(SpatialEstimator::class);
+        $reflectedSpatialEstimator = new ReflectionClass(SpatialEstimator::class);
         $nCKMethod = $reflectedSpatialEstimator->getMethod('nCK');
         $nCKMethod->setAccessible(true);
 
