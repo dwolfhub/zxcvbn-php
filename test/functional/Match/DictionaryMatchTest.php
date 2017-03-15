@@ -7,7 +7,6 @@ use Zxcvbn\Match\DictionaryMatch;
 
 class DictionaryMatchTest extends TestCase
 {
-
     public function testDictionaryMatches()
     {
         $matches = $this->dm('motherboard');
@@ -17,6 +16,24 @@ class DictionaryMatchTest extends TestCase
             'matched_word' => ['mother', 'motherboard', 'board'],
             'rank' => [2, 1, 3],
             'dictionary_name' => ['d1', 'd1', 'd1'],
+        ]);
+
+        $matches = $this->dm('abcdef');
+        $patterns = ['abcd', 'cdef'];
+        $msg = 'matches multiple words when they overlap';
+        $this->checkMatches($msg, $matches, 'dictionary', $patterns, [[0, 3], [2, 5]], [
+            'matched_word' => ['abcd', 'cdef'],
+            'rank' => [4, 5],
+            'dictionary_name' => ['d1', 'd1'],
+        ]);
+
+        $matches = $this->dm('BoaRdZ');
+        $patterns = ['BoaRd', 'Z'];
+        $msg = 'ignores uppercasing';
+        $this->checkMatches($msg, $matches, 'dictionary', $patterns, [[0,4], [5, 5]], [
+            'matched_word' => ['board', 'z'],
+            'rank' => [3, 1],
+            'dictionary_name' => ['d1', 'd2'],
         ]);
     }
 
