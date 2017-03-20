@@ -26,5 +26,10 @@
         "psr-4": {
             "Zxcvbn\\": "src/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "test\\": "test/"
+        }
     }
 }

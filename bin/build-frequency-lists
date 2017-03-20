@@ -115,19 +115,18 @@ foreach ($freqLists as $name => $tokenToRank) {
 
 $result = [];
 foreach ($filteredTokenAndRank as $name => $tokenRankPairs) {
-    sort($tokenRankPairs);
     $cutoffLimit = $dictionaries[$name];
     if ($cutoffLimit and count($tokenRankPairs) > $cutoffLimit) {
         $tokenRankPairs = array_slice($tokenRankPairs, 0, $cutoffLimit);
     }
-    $result[$name] = implode(',', array_map(function ($item) {
-        return $item[0];
-    }, $tokenRankPairs));
+    $result[$name] = array_map(function ($item) {
+        return (string) $item[0];
+    }, $tokenRankPairs);
 }
 
 $freqLists = $result;
 
-$outputFile = fopen(__DIR__ . '/../src/Matching/DataProvider/FrequencyLists.php', 'w');
+$outputFile = fopen(__DIR__ . '/../src/Match/DataProvider/FrequencyLists.php', 'w');
 fwrite(
     $outputFile,
     '<?php
