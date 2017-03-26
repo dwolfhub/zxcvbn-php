@@ -43,7 +43,7 @@ class L33tMatch extends AbstractMatch
     {
         $matches = [];
 
-        foreach ($this->enumerateL33tSubs() as $sub) {
+        foreach ($this->enumerateL33tSubs($this->relevantL33tSubtable($this->l33tTable)) as $sub) {
             if (empty($sub)) {
                 break;
             }
@@ -90,9 +90,9 @@ class L33tMatch extends AbstractMatch
     /**
      * @return array
      */
-    protected function enumerateL33tSubs()
+    protected function enumerateL33tSubs($table)
     {
-        $keys = array_keys($this->relevantL33tSubtable($this->l33tTable));
+        $keys = array_keys($table);
         $subs = [[]];
 
         $subs = $this->helper($keys, $subs);

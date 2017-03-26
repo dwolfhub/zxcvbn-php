@@ -1,6 +1,7 @@
 <?php
 namespace test\functional\Match;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 
 class AbstractFunctionalMatchTestCase extends TestCase
@@ -39,8 +40,8 @@ class AbstractFunctionalMatchTestCase extends TestCase
 
             foreach ($props as $propName => $propList) {
                 $propMsg = $propList[$k];
-                if (is_string($propMsg)) {
-                    $propMsg = sprintf("'%s'", $propMsg);
+                if (!is_string($propMsg)) {
+                    $propMsg = json_encode($propMsg);
                 }
                 $msg = sprintf('%s: matches[%s].%s == %s', $prefix, $k, $propName, $propMsg);
                 $this->assertEquals($propList[$k], $match[$propName], $msg);

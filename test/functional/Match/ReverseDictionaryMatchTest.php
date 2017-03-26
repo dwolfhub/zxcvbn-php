@@ -16,30 +16,31 @@ class ReverseDictionaryMatchTest extends AbstractFunctionalMatchTestCase
         ],
     ];
 
-    /**
-     * @var ReverseDictionaryMatch
-     */
-    protected $reverseDictionaryMatch;
-
-    public function setUp()
-    {
-        $dictionaryMatch = new DictionaryMatch();
-        $dictionaryMatch->setRankedDictionaries($this->testDicts);
-        $this->reverseDictionaryMatch = new ReverseDictionaryMatch();
-        $this->reverseDictionaryMatch->setDictionaryMatch($dictionaryMatch);
-    }
-
     public function testReverseDictionaryMatches()
     {
-        $this->reverseDictionaryMatch->setPassword('0123456789');
-        $matches = $this->reverseDictionaryMatch->getMatches();
-        $msg = 'matches against reversed words';
+        $password = '0123456789';
 
-        $this->checkMatches($msg, $matches, 'dictionary', ['123', '456'], [[1, 3], [4, 6]], [
-            'matched_word' => ['321', '654'],
-            'reversed' => [true, true],
-            'dictionary_name' => ['d1', 'd1'],
-            'rank' => [2, 4],
-        ]);
+        $dictionaryMatch = new DictionaryMatch();
+        $dictionaryMatch->setPassword(strrev($password));
+        $dictionaryMatch->setRankedDictionaries($this->testDicts);
+
+        $reverseDictionaryMatch = new ReverseDictionaryMatch();
+        $reverseDictionaryMatch->setDictionaryMatch($dictionaryMatch);
+        $reverseDictionaryMatch->setPassword($password);
+        $matches = $reverseDictionaryMatch->getMatches();
+
+        $this->checkMatches(
+            'matches against reversed words',
+            $matches,
+            'dictionary',
+            ['123', '456'],
+            [[1, 3], [4, 6]],
+            [
+                'matched_word' => ['321', '654'],
+                'reversed' => [true, true],
+                'dictionary_name' => ['d1', 'd1'],
+                'rank' => [2, 4],
+            ]
+        );
     }
 }
