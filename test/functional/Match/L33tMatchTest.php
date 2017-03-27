@@ -2,7 +2,6 @@
 
 namespace test\functional\Match;
 
-use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Zxcvbn\Match\DictionaryMatch;
 use Zxcvbn\Match\L33tMatch;
@@ -104,11 +103,18 @@ class L33tMatchTest extends AbstractFunctionalMatchTestCase
         }
     }
 
-    public function testL33tMatch()
+    public function testL33tMatchDoesNotMatchEmptyString()
     {
         $this->assertEquals([], $this->lm(''), "doesn't match ''");
-        $this->assertEquals([], $this->lm('password'), "doesn't match pure dictionary words");
+    }
 
+    public function testL33tMatchDoeNotMatchPureDictionaryWords()
+    {
+        $this->assertEquals([], $this->lm('password'), "doesn't match pure dictionary words");
+    }
+
+    public function testL33tMatchMatchesAgainstCommonL33tSubstitutions()
+    {
         $msg = 'matches against common l33t substitutions';
         foreach ([
                      ['p4ssword', 'p4ssword', 'password', 'words', 2, [0, 7], ['4' => 'a']],
@@ -124,6 +130,10 @@ class L33tMatchTest extends AbstractFunctionalMatchTestCase
             ]);
         }
 
+    }
+
+    public function testL33tMatchMatchesAgainstOverlappingL33tPatterns()
+    {
         $msg = 'matches against overlapping l33t patterns';
         $matches = $this->lm('@a(go{G0');
         $this->checkMatches($msg, $matches, 'dictionary', ['@a(', '(go', '{G0'],
