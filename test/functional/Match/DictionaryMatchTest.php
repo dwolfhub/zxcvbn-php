@@ -128,7 +128,7 @@ class DictionaryMatchTest extends AbstractFunctionalMatchTestCase
             foreach ($suffixes as $suffix) {
                 $i = strlen($prefix);
                 $j = strlen($prefix) + strlen($pattern) - 1;
-                array_push($result, [$prefix . $pattern . $suffix, $i, $j]);
+                $result[] = [$prefix . $pattern . $suffix, $i, $j];
             }
         }
         return $result;

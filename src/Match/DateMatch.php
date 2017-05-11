@@ -98,7 +98,7 @@ class DateMatch extends AbstractMatch
                         (int)substr($token, $l),
                     ]);
                     if ($dmy) {
-                        array_push($candidates, $dmy);
+                        $candidates[] = $dmy;
                     }
                 }
                 if (empty($candidates)) {
@@ -122,7 +122,7 @@ class DateMatch extends AbstractMatch
                     }
                 }
 
-                array_push($matches, [
+                $matches[] = [
                     'pattern' => 'date',
                     'token' => $token,
                     'i' => $i,
@@ -131,7 +131,7 @@ class DateMatch extends AbstractMatch
                     'year' => $bestCandidate['year'],
                     'month' => $bestCandidate['month'],
                     'day' => $bestCandidate['day'],
-                ]);
+                ];
             }
         }
 
@@ -157,7 +157,7 @@ class DateMatch extends AbstractMatch
                     continue;
                 }
 
-                array_push($matches, [
+                $matches[] = [
                     'pattern' => 'date',
                     'token' => $token,
                     'i' => $i,
@@ -166,7 +166,7 @@ class DateMatch extends AbstractMatch
                     'year' => $dmy['year'],
                     'month' => $dmy['month'],
                     'day' => $dmy['day'],
-                ]);
+                ];
             }
         }
 

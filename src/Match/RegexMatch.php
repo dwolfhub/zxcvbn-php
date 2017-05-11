@@ -23,14 +23,14 @@ class RegexMatch extends AbstractMatch
             if ($rxMatch) {
                 $token = $rxMatch[0];
                 $startPos = strpos($this->password, $token);
-                array_push($matches, [
+                $matches[] = [
                     'pattern' => 'regex',
                     'token' => $token,
                     'i' => $startPos,
                     'j' => $startPos + strlen($token) - 1,
                     'regex_name' => $regexName,
                     'regex_match' => $rxMatch,
-                ]);
+                ];
             }
         }
 

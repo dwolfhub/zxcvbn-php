@@ -109,10 +109,7 @@ function buildGraph($layoutStr, $slanted)
             $adjacencyGraph[(string)$char] = [];
             foreach (adjacencyFunc($x, $y, $slanted) as $coord) {
                 $hash = implode('|', $coord);
-                array_push(
-                    $adjacencyGraph[$char],
-                    !empty($positionTable[$hash]) ? $positionTable[$hash] : null
-                );
+                $adjacencyGraph[$char][] = !empty($positionTable[$hash]) ? $positionTable[$hash] : null;
             }
         }
     }

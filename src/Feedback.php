@@ -164,16 +164,16 @@ class Feedback
         $suggestions = [];
         $word = $match['token'];
         if (preg_match(DictionaryEstimator::START_UPPER, $word)) {
-            array_push($suggestions, "Capitalization doesn't help very much");
+            $suggestions[] = "Capitalization doesn't help very much";
         } else if (preg_match(DictionaryEstimator::ALL_UPPER, $word) and strtolower($word) != $word) {
-            array_push($suggestions, 'All-uppercase is almost as easy to guess as all-lowercase');
+            $suggestions[] = 'All-uppercase is almost as easy to guess as all-lowercase';
         }
 
         if ($match['reversed'] and strlen($match['token']) >= 4) {
-            array_push($suggestions, "Reversed words aren't much harder to guess");
+            $suggestions[] = "Reversed words aren't much harder to guess";
         }
         if (!empty($match['l33t'])) {
-            array_push($suggestions, "Predictable substitutions like '@' instead of 'a' don't help very much");
+            $suggestions[] = "Predictable substitutions like '@' instead of 'a' don't help very much";
         }
 
         return [

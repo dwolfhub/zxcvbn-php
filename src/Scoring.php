@@ -57,7 +57,7 @@ class Scoring
 
         $matchesByJ = array_fill(0, $n, []);
         foreach ($matches as $m) {
-            array_push($matchesByJ[$m['j']], $m);
+            $matchesByJ[$m['j']][] = $m;
         }
 
         // small detail: for deterministic output, sort each sublist by i.

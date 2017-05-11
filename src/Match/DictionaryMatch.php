@@ -22,7 +22,7 @@ class DictionaryMatch extends AbstractMatch
                     if (array_key_exists(substr($passwordLower, $i, $j - $i + 1), $rankedDict)) {
                         $word = substr($passwordLower, $i, $j - $i + 1);
                         $rank = $rankedDict[$word];
-                        array_push($matches, [
+                        $matches[] = [
                             'pattern' => 'dictionary',
                             'i' => $i,
                             'j' => $j,
@@ -32,7 +32,7 @@ class DictionaryMatch extends AbstractMatch
                             'dictionary_name' => $dictionaryName,
                             'reversed' => false,
                             'l33t' => false,
-                        ]);
+                        ];
                     }
                 }
             }

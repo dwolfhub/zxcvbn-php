@@ -60,7 +60,7 @@ class L33tMatch extends AbstractMatch
                 // subset of mappings in sub that are in use for this match
                 $matchSub = [];
                 foreach ($sub as $subbedChr => $chr) {
-                    if (strpos($token, (string) $subbedChr) !== false) {
+                    if (strpos($token, (string)$subbedChr) !== false) {
                         $matchSub[$subbedChr] = $chr;
                     }
                 }
@@ -74,7 +74,7 @@ class L33tMatch extends AbstractMatch
                 }
                 $match['sub_display'] = implode(', ', $subDisplays);
 
-                array_push($matches, $match);
+                $matches[] = $match;
             }
         }
 
@@ -88,6 +88,7 @@ class L33tMatch extends AbstractMatch
     }
 
     /**
+     * @param array $table
      * @return array
      */
     protected function enumerateL33tSubs($table)
@@ -102,7 +103,7 @@ class L33tMatch extends AbstractMatch
             foreach ($sub as list($l33tChr, $chr)) {
                 $subDict[$l33tChr] = $chr;
             }
-            array_push($subDicts, $subDict);
+            $subDicts[] = $subDict;
         }
 
         return $subDicts;
@@ -133,14 +134,14 @@ class L33tMatch extends AbstractMatch
                 }
                 if ($dupL33tIndex == -1) {
                     $subExtension = $sub;
-                    array_push($subExtension, [$l33tChr, $firstKey]);
-                    array_push($nextSubs, $subExtension);
+                    $subExtension[] = [$l33tChr, $firstKey];
+                    $nextSubs[] = $subExtension;
                 } else {
                     $subAlternative = $sub;
                     array_splice($subAlternative, $dupL33tIndex, 1);
-                    array_push($subAlternative, [$l33tChr, $firstKey]);
-                    array_push($nextSubs, $sub);
-                    array_push($nextSubs, $subAlternative);
+                    $subAlternative[] = [$l33tChr, $firstKey];
+                    $nextSubs[] = $sub;
+                    $nextSubs[] = $subAlternative;
                 }
             }
         }
@@ -173,7 +174,7 @@ class L33tMatch extends AbstractMatch
 
             if (!array_key_exists($label, $members)) {
                 $members[$label] = true;
-                array_push($deduped, $sub);
+                $deduped[] = $sub;
             }
         }
 
@@ -189,9 +190,9 @@ class L33tMatch extends AbstractMatch
         $chars = [];
         foreach (str_split($this->password) as $char) {
             if (!empty($chrMap[$char])) {
-                array_push($chars, $chrMap[$char]);
+                $chars[] = $chrMap[$char];
             } else {
-                array_push($chars, $char);
+                $chars[] = $char;
             }
         }
 
