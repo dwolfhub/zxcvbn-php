@@ -24,7 +24,6 @@ class ReverseDictionaryMatch extends AbstractMatch
             $match['token'] = strrev($match['token']);
             $match['reversed'] = true;
             list($tempI, $tempJ) = [$match['i'], $match['j']];
-            var_dump($tempI, $tempJ);
             $match['i'] = strlen($this->password) - 1 - $tempJ;
             $match['j'] = strlen($this->password) - 1 - $tempI;
 
