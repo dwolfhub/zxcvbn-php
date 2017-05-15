@@ -166,6 +166,20 @@ class L33tMatchTest extends AbstractFunctionalMatchTestCase
 
     }
 
+    public function testDoesntMatchWhenMultipleL33tSubstitutionsAreNeededForTheSameLetter()
+    {
+        $this->assertSame([], $this->lm('p4@ssword'));
+    }
+
+    public function testDoesntMatchSingleCharacterL33tedWords()
+    {
+        $this->assertSame([], $this->lm('4 1 @'));
+    }
+
+    public function testDoesntMatchWithSubsetsOfPossibleL33tSubstitutions()
+    {
+        $this->assertSame([], $this->lm('4sdf0'));
+    }
     private function lm($pw)
     {
         $dictionaryMatch = new DictionaryMatch();

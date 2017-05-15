@@ -96,7 +96,7 @@ class L33tMatch extends AbstractMatch
         $keys = array_keys($table);
         $subs = [[]];
 
-        $subs = $this->helper($keys, $subs);
+        $subs = $this->helper($table, $keys, $subs);
         $subDicts = []; // convert from assoc lists to dicts
         foreach ($subs as $sub) {
             $subDict = [];
@@ -114,7 +114,7 @@ class L33tMatch extends AbstractMatch
      * @param $subs
      * @return array
      */
-    protected function helper($keys, $subs)
+    protected function helper($table, $keys, $subs)
     {
         if (empty($keys)) {
             return $subs;
@@ -123,7 +123,7 @@ class L33tMatch extends AbstractMatch
         $firstKey = $keys[0];
         $restKeys = array_slice($keys, 1);
         $nextSubs = [];
-        foreach ($this->l33tTable[$firstKey] as $l33tChr) {
+        foreach ($table[$firstKey] as $l33tChr) {
             foreach ($subs as $sub) {
                 $dupL33tIndex = -1;
                 for ($i = 0; $i < count($sub); $i++) {
@@ -148,7 +148,7 @@ class L33tMatch extends AbstractMatch
 
         $subs = $this->deDup($nextSubs);
 
-        return $this->helper($restKeys, $subs);
+        return $this->helper($table, $restKeys, $subs);
     }
 
     /**
